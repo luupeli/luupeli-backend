@@ -1,3 +1,4 @@
+// Logs requests to the server
 const logger = (request, response, next) => {
   if (process.env.NODE_ENV === 'test') {
     return next()
@@ -9,6 +10,7 @@ const logger = (request, response, next) => {
   next()
 }
 
+// Gives status 404 and an error message when trying to access malformed urls
 const error = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
