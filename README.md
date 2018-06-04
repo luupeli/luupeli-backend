@@ -3,7 +3,7 @@
 
 ### Endpoints
 
- `http://oispakaljaa.herokuapp.com/api`
+ `http://luupeli-backend.herokuapp.com/api`
 
 Path | Method | Description
 -----|------|------------
