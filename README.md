@@ -3,6 +3,8 @@
 
 ### Endpoints
 
+`http://luupeli-backend.herokuapp.com/api`
+
 Path | Method | Description
 -----|------|------------
 `/bones/` | GET | Returns an array of all bones.
@@ -17,7 +19,7 @@ Path | Method | Description
 `/images/:imageId` | DELETE | Removes a specific image and removes connect if the image is connected with bone.
 
 #### Bone
-##### POST Example
+##### Example
 ```
 {
     "id": "5b1567f96ff3192a471571fc",
@@ -28,12 +30,12 @@ Path | Method | Description
 ```
 
 #### Image
-##### POST Example
+##### Example
 ```
 {
-    "id": "5b15689a6ff3192a471571fe"
+    "id": "5b15689a6ff3192a471571fe",
     "difficulty": "1",
-    "url": "ossisfemoris.jpg",
+    "url": "public/images/ossisfemoris.jpg",
     "bone": "5b152f647053790f4be55bc4"
 }
 ```
