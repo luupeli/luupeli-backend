@@ -3,7 +3,7 @@
 
 ### Endpoints
 
- `http://luupeli-backend.herokuapp.com/api`
+`http://luupeli-backend.herokuapp.com/api`
 
 Path | Method | Description
 -----|------|------------
@@ -15,13 +15,14 @@ Path | Method | Description
 `/images/` | GET | Returns an array of all images.
 `/images/` | POST | Creates a new image.
 `/images/:imageId` | GET | Gets a specific image.
-`/images/:imageId` | PUT | Edits difficulty and url. The bone cannot be edited.
+`/images/:imageId` | PUT | Edits difficulty. The bone and url cannot be edited.
 `/images/:imageId` | DELETE | Removes a specific image and removes connect if the image is connected with bone.
 
 #### Bone
-##### POST Example
+##### Example
 ```
 {
+    "id": "5b15d89a6ffw192a471571fe",
     "name": "reisiluu",
     "nameLatin": "ossis femoris",
     "images": ["5b15674e6ff3192a471571fa", "5b156d2af4d39b2db027f191"]
@@ -29,11 +30,12 @@ Path | Method | Description
 ```
 
 #### Image
-##### POST Example
+##### Example
 ```
 {
+    "id": "5b15689a6ff3192a471571fe",
     "difficulty": "1",
-    "url": "ossisfemoris.jpg",
+    "url": "public/images/ossisfemoris.jpg",
     "bone": "5b152f647053790f4be55bc4"
 }
 ```
