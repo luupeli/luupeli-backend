@@ -3,6 +3,8 @@
 
 ### Endpoints
 
+ `http://oispakaljaa.herokuapp.com/api`
+
 Path | Method | Description
 -----|------|------------
 `/bones/` | GET | Returns an array of all bones.
