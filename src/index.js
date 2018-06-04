@@ -23,6 +23,7 @@ app.use(require('body-parser').json())
 app.use(express.static('build'))
 app.use(require('./utils/middleware').logger)
 app.use('/api/bones', require('./controllers/bones'))
+app.use('/api/images', require('./controllers/images'))
 app.use(require('./utils/middleware').error)
 
 // Create a server

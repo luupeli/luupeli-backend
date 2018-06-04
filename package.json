@@ -14,9 +14,11 @@
   },
   "scripts": {
     "start": "node ./src/index.js",
+    "watch": "nodemon ./src/index.js",
     "test": "NODE_ENV=test node_modules/.bin/jest --verbose"
   },
   "devDependencies": {
+    "nodemon": "^1.17.5",
     "supertest": "^3.1.0"
   }
 }

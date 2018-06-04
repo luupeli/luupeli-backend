@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const boneSchema = new mongoose.Schema({
   name: String,
   nameLatin: String,
-  image: String
+  images: [{ type: mongoose.Schema.Types.ObjectId, ref: 'image' }]
 })
 
 // Formats bone from the database to be used in the app
@@ -13,10 +13,10 @@ boneSchema.statics.format = (bone) => {
     id: bone._id,
     name: bone.name,
     nameLatin: bone.nameLatin,
-    image: bone.image
+    images: bone.images
   }
 }
 
-const Bone = mongoose.model('Bone', boneSchema)
+const Bone = mongoose.model('bone', boneSchema)
 
 module.exports = Bone
