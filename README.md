@@ -20,7 +20,6 @@ Path | Method | Description
 ##### POST Example
 ```
 {
-    "id": "5b1567f96ff3192a471571fc",
     "name": "reisiluu",
     "nameLatin": "ossis femoris",
     "images": ["5b15674e6ff3192a471571fa", "5b156d2af4d39b2db027f191"]
@@ -31,7 +30,6 @@ Path | Method | Description
 ##### POST Example
 ```
 {
-    "id": "5b15689a6ff3192a471571fe"
     "difficulty": "1",
     "url": "ossisfemoris.jpg",
     "bone": "5b152f647053790f4be55bc4"
