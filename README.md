@@ -15,7 +15,7 @@ Path | Method | Description
 `/images/` | GET | Returns an array of all images.
 `/images/` | POST | Creates a new image.
 `/images/:imageId` | GET | Gets a specific image.
-`/images/:imageId` | PUT | Edits difficulty and url. The bone cannot be edited.
+`/images/:imageId` | PUT | Edits difficulty. The bone and url cannot be edited.
 `/images/:imageId` | DELETE | Removes a specific image and removes connect if the image is connected with bone.
 `/animals/` | GET | Returns an array of all animals.
 `/animals/` | POST | Creates a new animal.
@@ -26,7 +26,7 @@ Path | Method | Description
 ##### Example
 ```
 {
-    "id": "5b1567f96ff3192a471571fc",
+    "id": "5b15d89a6ffw192a471571fe",
     "name": "reisiluu",
     "nameLatin": "ossis femoris",
     "bodypart": "5b1696776319da662a7ab535",
