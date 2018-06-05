@@ -18,7 +18,7 @@ const upload = multer({ storage: storage });
 imagesRouter.get('/', async (request, response) => {
     const images = await Image
         .find({})
-        .populate('bone', { name: 1, nameLatin: 1 })
+        .populate('bone', { name: 1, nameLatin: 1, bodypart: 1, animal: 1 })
     console.log('operation returned images ', images)
     response.json(images.map(Image.format))
 })
@@ -28,7 +28,7 @@ imagesRouter.get('/:id', async (request, response) => {
     try {
         const image = await Image
             .findById(request.params.id)
-            .populate('bone', { name: 1, nameLatin: 1 })
+            .populate('bone', { name: 1, nameLatin: 1, bodypart: 1, animal: 1 })
         if (image) {
             response.json(Image.format(image))
         } else {
