@@ -7,6 +7,8 @@ bonesRouter.get('/', async (request, response) => {
   const bones = await Bone
     .find({})
     .populate('images', { difficulty: 1, url: 1 })
+    .populate('animal', { name: 1 })
+    .populate('bodypart', { name: 1 })
   console.log('operation returned bones ', bones)
   response.json(bones.map(Bone.format))
 })
@@ -17,6 +19,8 @@ bonesRouter.get('/:id', async (request, response) => {
     const bone = await Bone
       .findById(request.params.id)
       .populate('images', { difficulty: 1, url: 1 })
+      .populate('animal', { name: 1 })
+      .populate('bodypart', { name: 1 })
     if (bone) {
       response.json(Bone.format(bone))
     } else {
@@ -41,7 +45,9 @@ bonesRouter.post('/', async (request, response) => {
     const bone = new Bone({
       name: body.name,
       nameLatin: body.nameLatin,
-      images: images
+      images: images,
+      bodypart: body.bodypart,
+      animal: body.animal
     })
 
     // Connect bone and images if images are given
@@ -87,7 +93,9 @@ bonesRouter.put('/:id', async (request, response) => {
     const bone = {
       name: body.name,
       nameLatin: body.nameLatin,
-      images: oldBone.images
+      images: oldBone.images,
+      bodypart: body.bodypart,
+      animal: body.animal
     }
 
     const updatedBone = await Bone.findByIdAndUpdate(request.params.id, bone, { new: true })
