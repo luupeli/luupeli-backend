@@ -17,6 +17,10 @@ Path | Method | Description
 `/images/:imageId` | GET | Gets a specific image.
 `/images/:imageId` | PUT | Edits difficulty. The bone and url cannot be edited.
 `/images/:imageId` | DELETE | Removes a specific image and removes connect if the image is connected with bone.
+`/animals/` | GET | Returns an array of all animals.
+`/animals/` | POST | Creates a new animal.
+`/bodyparts/` | GET | Returns an array of all body parts.
+`/bodyparts/` | POST | Creates a new body part.
 
 #### Bone
 ##### Example
@@ -25,6 +29,8 @@ Path | Method | Description
     "id": "5b15d89a6ffw192a471571fe",
     "name": "reisiluu",
     "nameLatin": "ossis femoris",
+    "bodypart": "5b1696776319da662a7ab535",
+    "animal": "5b16961f9aaa4765f8ec6a75",
     "images": ["5b15674e6ff3192a471571fa", "5b156d2af4d39b2db027f191"]
 }
 ```
