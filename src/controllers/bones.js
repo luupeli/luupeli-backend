@@ -90,6 +90,10 @@ bonesRouter.put('/:id', async (request, response) => {
     const body = request.body
     const oldBone = await Bone.findById(request.params.id)
 
+    if (!oldBone) {
+      response.status(404).end()
+    }
+
     const bone = {
       name: body.name,
       nameLatin: body.nameLatin,
@@ -102,7 +106,7 @@ bonesRouter.put('/:id', async (request, response) => {
 
     response.json(Bone.format(updatedBone))
   } catch (err) {
-    console.log(error)
+    console.log(err)
     response.status(400).send({ error: 'malformatted id' })
   }
 })

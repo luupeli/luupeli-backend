@@ -99,9 +99,9 @@ describe('when there is initially some bones saved', async () => {
     
     test('suffesfully updates a bone by PUT /bone/api/:id with correct statuscode', async () => {
       const bonesAtStart = await bonesInDb()
-      let boneToBeUpdated = bonesAtStart[2]
+      let boneToBeUpdated = bonesAtStart[1]
 
-      boneToBeUpdated.name = 'uusi toinen luu'
+      boneToBeUpdated.name = 'new bone'
 
       await api
         .put(url+'/'+boneToBeUpdated.id)
@@ -110,32 +110,29 @@ describe('when there is initially some bones saved', async () => {
 
       const bonesAfterPut = await bonesInDb()
       const names = bonesAfterPut.map(b => b.name)
-      expect(names).toContain('uusi toinen luu')
-      // Vanha bone löytyi vielä updaten jälkeen?
-      //expect(names).not.toContain('toinen luu')
+      expect(names).toContain('new bone')
+      expect(names).not.toContain('toinen luu')
     })
-    // Tää testi ei pääse edes statuskoodiin asti,
-    // kun jokin muu metodi -- kaiketi se yhdistämismetodi --
-    // kaataa jo koko ohjelman. Pitänee selvittää.
-    // test('400 statuscode is retured when PUT /api/bones/:id is done with malformatted id', async () => {
-    //   const invalidId = '7h3b0n3154l13'
-    //   const aBone = {
-    //     name: 'huono iideeluu',
-    //     nameLatin: 'ossis vilis id'
-    //   }
 
-    //   const bonesAtStart = await bonesInDb()
+     test('400 statuscode is retured when PUT /api/bones/:id is done with malformatted id', async () => {
+       const invalidId = '7h3b0n3154l13'
+       const aBone = {
+         name: 'huono iideeluu',
+         nameLatin: 'ossis vilis id'
+       }
 
-    //   await api
-    //     .put(url+'/'+invalidId)
-    //     .send(aBone)
-    //     .expect(400)
+       const bonesAtStart = await bonesInDb()
+
+       await api
+         .put(url+'/'+invalidId)
+         .send(aBone)
+         .expect(400)
       
-    //   const bonesAfterPut = await bonesInDb()
-    //   const names = bonesAfterPut.map(b => b.name)
-    //   expect(bonesAfterPut.length).toBe(bonesAtStart.length)
-    //   expect(names).not.toContain('huono iideeluu')
-    // })
+       const bonesAfterPut = await bonesInDb()
+       const names = bonesAfterPut.map(b => b.name)
+       expect(bonesAfterPut.length).toBe(bonesAtStart.length)
+       expect(names).not.toContain('huono iideeluu')
+     })
   })
 
   describe('deletion of a bone', async () => {
