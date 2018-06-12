@@ -78,12 +78,26 @@ describe('when there is initially some bones saved', async () => {
       expect(names).toContain('reisiluu')
     })
 
-    test('400 statuscode is returned when POST /api/bones is done with missing content', async () => {
+    test('400 statuscode is returned when POST /api/bones is done with missing name', async () => {
+      const bonesAtStart = await bonesInDb()
       const newBone = {
         nameLatin: "oblivio"
       }
 
+      await api
+        .post(url)
+        .send(newBone)
+        .expect(400)
+
+      const bonesAfterPost = await bonesInDb()
+      expect(bonesAfterPost.length).toBe(bonesAtStart.length)
+    })
+
+    test('400 statuscode is returned when POST /api/bones is done with missing latin name', async () => {
       const bonesAtStart = await bonesInDb()
+      const newBone = {
+        name: "luu"
+      }
 
       await api
         .post(url)
@@ -99,7 +113,7 @@ describe('when there is initially some bones saved', async () => {
     
     test('suffesfully updates a bone by PUT /bone/api/:id with correct statuscode', async () => {
       const bonesAtStart = await bonesInDb()
-      let boneToBeUpdated = bonesAtStart[1]
+      let boneToBeUpdated = bonesAtStart[0]
 
       boneToBeUpdated.name = 'new bone'
 
@@ -111,28 +125,27 @@ describe('when there is initially some bones saved', async () => {
       const bonesAfterPut = await bonesInDb()
       const names = bonesAfterPut.map(b => b.name)
       expect(names).toContain('new bone')
-      expect(names).not.toContain('toinen luu')
+      expect(names).not.toContain('ensimmäinen luu')
     })
 
-     test('400 statuscode is retured when PUT /api/bones/:id is done with malformatted id', async () => {
-       const invalidId = '7h3b0n3154l13'
-       const aBone = {
+    test('400 statuscode is returned when PUT /api/bones/:id is done with malformatted id', async () => {
+      const bonesAtStart = await bonesInDb() 
+      const invalidId = '7h3b0n3154l13'
+      const aBone = {
          name: 'huono iideeluu',
          nameLatin: 'ossis vilis id'
-       }
+      }
 
-       const bonesAtStart = await bonesInDb()
-
-       await api
-         .put(url+'/'+invalidId)
-         .send(aBone)
-         .expect(400)
+      await api
+        .put(url+'/'+invalidId)
+        .send(aBone)
+        .expect(400)
       
-       const bonesAfterPut = await bonesInDb()
-       const names = bonesAfterPut.map(b => b.name)
-       expect(bonesAfterPut.length).toBe(bonesAtStart.length)
-       expect(names).not.toContain('huono iideeluu')
-     })
+      const bonesAfterPut = await bonesInDb()
+      const names = bonesAfterPut.map(b => b.name)
+      expect(bonesAfterPut.length).toBe(bonesAtStart.length)
+      expect(names).not.toContain('huono iideeluu')
+    })
   })
 
   describe('deletion of a bone', async () => {

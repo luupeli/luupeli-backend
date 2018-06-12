@@ -3,6 +3,7 @@ const { app, server } = require('../index')
 const api = supertest(app)
 const Image = require('../models/image')
 const { formatImage, initialImages, imagesInDb, nonExistingImageId } = require('./image_test_helper')
+const { bonesInDb } = require('./bone_test_helper')
 
 const url = '/api/images'
 
@@ -54,13 +55,103 @@ describe('when there is initially some images saved', async () => {
       .expect(404)
   })
 
-  // describe('addition of a new image', async () => {
+  describe('addition of a new image', async () => {
 
-  //   test('succesfully adds valid image by POST /api/images', async () => {
+    // test('succesfully adds valid image by POST /api/images', async () => {
+    //   const imagesAtStart = await imagesInDb()
+    //   const bonesAtStart = bonesInDb()
+    //   const aBone = bonesAtStart[0]
+    //   console.log(aBone)
+    //   const newImage = {
+    //     difficulty: 'easy',
+    //     url: 'luu.jpg',
+    //     bone: aBone
+    //   }
+    //   console.log(newImage)
+    //   await api
+    //     .post(url)
+    //     .send(newImage)
+    //     .expect(200)
+    //     .expect('Content-Type', /application\/json/)
 
-  //   })
-  // lisättävä myös epäonnistuva lisäys, update ja delete
-  // })
+    //   const imagesAfterPost = await imagesInDb()
+    //   expect(imagesAfterPost.length).toBe(imagesAtStart + 1)
+    //   const urls = imagesAfterPost.map(i => i.url)
+    //   expect(urls).toContain('luu.jpg')
+    // })
+
+    test('400 statuscode is returned when POST /api/images is done with missing url', async () => {
+      const imagesAtStart = await imagesInDb()
+      const newImage ={
+        difficulty: 'hard'
+      }
+
+      await api
+        .post(url)
+        .send(newImage)
+        .expect(400)
+
+      const imagesAfterPost = await imagesInDb()
+      expect(imagesAfterPost.length).toBe(imagesAtStart.length)
+    })
+
+    test('400 statuscode is returned when POST /api/images is done with missing url', async () => {
+      const newImage ={
+        url: 'image_without_urljpg'
+      }
+
+      const imagesAtStart = await imagesInDb()
+
+      await api
+        .post(url)
+        .send(newImage)
+        .expect(400)
+
+      const imagesAfterPost = await imagesInDb()
+      expect(imagesAfterPost.length).toBe(imagesAtStart.length)
+    })
+  })
+
+  describe('updating an image', async () => {
+
+    test('succesfully updates an image by PUT /image/api/:id with correct statuscode', async () => {
+      const imagesAtStart = await imagesInDb()
+      let imageToBeUpdated = imagesAtStart[0]
+      imageToBeUpdated.difficulty = 'hard'
+
+      await api
+        .put(url+'/'+imageToBeUpdated.id)
+        .send(imageToBeUpdated)
+        .expect(200)
+
+      const imagesAfterPut = await imagesInDb()
+      const difficulties = imagesAfterPut.map(i => i.difficulty)
+      expect(difficulties).toContain('hard')
+    })
+
+    test('400 statuscode is returned when PUT /api/images/:id is done with malformatted id', async () => {
+      const imagesAtStart = await imagesInDb()
+      const invalidId = '7h31m4g3154l13'
+      let anImage = imagesAtStart[0]
+      
+      console.log(anImage)
+      anImage = {
+        id: invalidId,
+        difficulty: 'extra hard'
+      }
+
+      console.log(anImage)
+      await api
+        .put(url+'/'+invalidId)
+        .send(anImage)
+        .expect(400)
+      
+      const imagesAfterPut = await imagesInDb()
+      const difficulties = imagesAfterPut.map(i => i.difficulty)
+      expect(imagesAfterPut.length).toBe(imagesAtStart.length)
+      expect(difficulties).not.toContain('extra hard')
+    })
+  })
 
   afterAll(() => {
     server.close()

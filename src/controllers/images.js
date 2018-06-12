@@ -47,6 +47,8 @@ imagesRouter.post('/', upload.single('image'), async (request, response) => {
 
         if (body.difficulty === undefined) {
             return response.status(400).json({ error: 'difficulty missing' })
+        } else if (body.url === undefined) {
+            return response.status(400).json({ error: 'image url missing' })
         }
 
         const image = new Image({
@@ -104,7 +106,7 @@ imagesRouter.put('/:id', async (request, response) => {
 
         response.json(Image.format(updatedImage))
     } catch (err) {
-        console.log(error)
+        console.log(err)
         response.status(400).send({ error: 'malformatted id' })
     }
 })

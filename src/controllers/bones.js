@@ -36,8 +36,11 @@ bonesRouter.get('/:id', async (request, response) => {
 bonesRouter.post('/', async (request, response) => {
   try {
     const body = request.body
+    
     if (body.name === undefined) {
-      return response.status(400).json({ error: 'content missing' })
+      return response.status(400).json({ error: 'name missing' })
+    } else if (body.nameLatin === undefined) {
+      return response.status(400).json({ error: 'latin name missing' })
     }
 
     const images = body.images
