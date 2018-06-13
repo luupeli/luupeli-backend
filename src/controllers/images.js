@@ -47,8 +47,6 @@ imagesRouter.post('/', upload.single('image'), async (request, response) => {
 
         if (body.difficulty === undefined) {
             return response.status(400).json({ error: 'difficulty missing' })
-        } else if (body.url === undefined) {
-            return response.status(400).json({ error: 'image url missing' })
         }
 
         const image = new Image({
