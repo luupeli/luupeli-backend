@@ -80,7 +80,7 @@ describe('when there is initially some images saved', async () => {
     //   expect(urls).toContain('luu.jpg')
     // })
 
-    test('400 statuscode is returned when POST /api/images is done with missing url', async () => {
+/*    test('400 statuscode is returned when POST /api/images is done with missing url', async () => {
       const imagesAtStart = await imagesInDb()
       const newImage ={
         difficulty: 'hard'
@@ -94,7 +94,7 @@ describe('when there is initially some images saved', async () => {
       const imagesAfterPost = await imagesInDb()
       expect(imagesAfterPost.length).toBe(imagesAtStart.length)
     })
-
+*/
     test('400 statuscode is returned when POST /api/images is done with missing url', async () => {
       const newImage ={
         url: 'image_without_urljpg'
