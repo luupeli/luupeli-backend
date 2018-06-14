@@ -10,7 +10,25 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + file.originalname)
     }
 });
-const upload = multer({ storage: storage }).single('image');
+const upload = multer({ 
+    storage: storage,
+    limits:{fileSize: 5000000},
+    fileFilter: function(req, file, cb){
+        checkFileType(file, cb)
+    }
+}).single('image');
+
+function checkFileType(file, cb) {
+    const filetypes = /jpeg|jpg|png|gif/
+    const extname = filetypes.test(file.originalname.toLowerCase())
+    const mimetype = filetypes.test(file.mimetype)
+
+    if(mimetype && extname) {
+        return cb(null, true)
+    } else {
+        cb('Error: Images only!')
+    }
+}
 
 // Finds all images from database after GET-request and returns in JSON
 imagesRouter.get('/', async (request, response) => {
@@ -38,13 +56,14 @@ imagesRouter.get('/:id', async (request, response) => {
     }
 })
 
+// Saves image to folder /images/ and return image url
 imagesRouter.post('/upload', (request, response) => {
     upload(request, response, (err => {
         if (err) {
-            console.log(err)
+            response.status(400).json({ error: err })
         } else {
             console.log(request)
-            response.json({ url: request.file.filename})
+            response.json({ url: '/images/' + request.file.filename})
         }
     }))
 })
@@ -64,7 +83,7 @@ imagesRouter.post('/', async (request, response) => {
 
         const image = new Image({
             difficulty: body.difficulty,
-            url: 'public/images/' + body.url,
+            url: body.url,
             bone: body.bone
         })
         const savedImage = await image.save()
