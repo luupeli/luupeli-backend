@@ -5,14 +5,12 @@ const multer = require('multer')
 
 // Saves images to server
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'public/images')
-    },
+    destination: './public/images/',
     filename: (req, file, cb) => {
         cb(null, Date.now() + file.originalname)
     }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage }).single('image');
 
 // Finds all images from database after GET-request and returns in JSON
 imagesRouter.get('/', async (request, response) => {
@@ -40,8 +38,19 @@ imagesRouter.get('/:id', async (request, response) => {
     }
 })
 
+imagesRouter.post('/upload', (request, response) => {
+    upload(request, response, (err => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(request)
+            response.json({ url: request.file.filename})
+        }
+    }))
+})
+
 // Creates a image from given request and saves it to the database
-imagesRouter.post('/', upload.single('image'), async (request, response) => {
+imagesRouter.post('/', async (request, response) => {
     try {
         const body = request.body
 
@@ -49,9 +58,13 @@ imagesRouter.post('/', upload.single('image'), async (request, response) => {
             return response.status(400).json({ error: 'difficulty missing' })
         }
 
+        if (body.url === undefined) {
+            return response.status(400).json({ error: 'url missing' })
+        }
+
         const image = new Image({
             difficulty: body.difficulty,
-            url: 'public/images/' + request.file.filename,
+            url: 'public/images/' + body.url,
             bone: body.bone
         })
         const savedImage = await image.save()
