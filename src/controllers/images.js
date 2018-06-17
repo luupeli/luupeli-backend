@@ -63,7 +63,7 @@ imagesRouter.post('/upload', (request, response) => {
             response.status(400).json({ error: err })
         } else {
             console.log(request)
-            response.json({ url: '/images/' + request.file.filename})
+            response.json({ url: '/images/' + request.file.name})
         }
     }))
 })
