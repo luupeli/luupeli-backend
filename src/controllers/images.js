@@ -2,6 +2,7 @@ const imagesRouter = require('express').Router()
 const Image = require('../models/image')
 const Bone = require('../models/bone')
 const multer = require('multer')
+var fs = require('fs')
 
 // Saves images to server
 const storage = multer.diskStorage({
@@ -63,7 +64,7 @@ imagesRouter.post('/upload', (request, response) => {
             response.status(400).json({ error: err })
         } else {
             console.log(request)
-            response.json({ url: '/images/' + request.file.name})
+            response.json({ url: '/images/' + request.file.filename})
         }
     }))
 })
