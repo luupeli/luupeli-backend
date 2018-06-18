@@ -10,6 +10,7 @@ animalSchema.statics.format = (animal) => {
   return {
     id: animal._id,
     name: animal.name,
+    //bone to image
     bones: animal.bones
   }
 }

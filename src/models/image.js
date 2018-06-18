@@ -13,6 +13,9 @@ imageSchema.statics.format = (image) => {
         id: image._id,
         difficulty: image.difficulty,
         url: image.url,
+        //add animal here
+        //and url-lite
+        //and think how to do left/right, copyrights, info
         bone: image.bone
     }
 }

@@ -16,6 +16,7 @@ boneSchema.statics.format = (bone) => {
     name: bone.name,
     nameLatin: bone.nameLatin,
     images: bone.images,
+    //delete animal
     animal: bone.animal,
     bodypart: bone.bodypart
   }
