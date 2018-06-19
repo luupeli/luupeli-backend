@@ -53,8 +53,8 @@ bonesRouter.post('/', async (request, response) => {
       bodyPart: body.bodyPart,
       animals: body.animals,
       description: body.description,
-      lastModified: body.lastModified,
-      creationTime: body.creationTime
+      lastModified: Date.now(),
+      creationTime: Date.now()
     })
 
     // Connect bone and images if images are given

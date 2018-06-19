@@ -92,8 +92,8 @@ imagesRouter.post('/', async (request, response) => {
             photographer: body.photographer,
             handedness: body.handedness,
             description: body.description,
-            lastModified: body.lastModified, 
-            creationTime: body.creationTime,
+            lastModified: Date.now(), 
+            creationTime: Date.now(),
             attempts: body.attempts,
             correctAttempts: body.correctAttempts
         })

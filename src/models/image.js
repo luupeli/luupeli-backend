@@ -10,8 +10,8 @@ const imageSchema = new mongoose.Schema({
     photographer: String,
     handedness: String,
     description: String,
-    lastModified: { type: Date, default: Date.now }, 
-    creationTime: { type: Date, default: Date.now },
+    lastModified: { type: Date }, 
+    creationTime: { type: Date },
     attempts: Number,
     correctAttempts: Number
 })

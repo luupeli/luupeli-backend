@@ -9,8 +9,8 @@ const boneSchema = new mongoose.Schema({
   bodyPart: { type: mongoose.Schema.Types.ObjectId, ref: 'bodyPart' },
   animals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'animal' }],
   description: String,
-  lastModified: { type: Date, default: Date.now }, 
-  creationTime: { type: Date, default: Date.now }
+  lastModified: { type: Date }, 
+  creationTime: { type: Date }
 })
 
 // Formats bone from the database to be used in the app
