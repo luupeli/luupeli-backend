@@ -26,7 +26,7 @@ app.use(require('./utils/middleware').logger)
 app.use('/api/bones', require('./controllers/bones'))
 app.use('/api/images', require('./controllers/images'))
 app.use('/api/animals', require('./controllers/animals'))
-app.use('/api/bodyparts', require('./controllers/bodyparts'))
+app.use('/api/bodyparts', require('./controllers/bodyParts'))
 app.use(require('./utils/middleware').error)
 
 // Create a server

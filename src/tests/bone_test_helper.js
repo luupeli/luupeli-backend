@@ -26,8 +26,8 @@ const formatBone = (bone) => {
     name: bone.name,
     nameLatin: bone.nameLatin,
     images: bone.images,
-    animal: bone.animal,
-    bodypart: bone.bodypart
+    animals: bone.animals,
+    bodyPart: bone.bodyPart
   }
 }
 
