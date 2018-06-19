@@ -13,6 +13,6 @@ bodypartSchema.statics.format = (bodypart) => {
   }
 }
 
-const Bodypart = mongoose.model('bodypart', bodypartSchema)
+const Bodypart = mongoose.model('bodyPart', bodypartSchema)
 
 module.exports = Bodypart

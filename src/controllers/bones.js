@@ -8,7 +8,7 @@ bonesRouter.get('/', async (request, response) => {
     .find({})
     .populate('images')
     .populate('animals', { name: 1 })
-    .populate('bodypart', { name: 1 })
+    .populate('bodyPart', { name: 1 })
   console.log('operation returned bones ', bones)
   response.json(bones.map(Bone.format))
 })
@@ -20,7 +20,7 @@ bonesRouter.get('/:id', async (request, response) => {
       .findById(request.params.id)
       .populate('images')
       .populate('animals', { name: 1 })
-      .populate('bodypart', { name: 1 })
+      .populate('bodyPart', { name: 1 })
     if (bone) {
       response.json(Bone.format(bone))
     } else {
