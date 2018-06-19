@@ -21,7 +21,7 @@ mongoose.Promise = global.Promise
 app.use(express.static('public'))
 app.use(cors())
 app.use(require('body-parser').json())
-// app.use(express.static('build'))
+app.use(express.static('build'))
 app.use(require('./utils/middleware').logger)
 app.use('/api/bones', require('./controllers/bones'))
 app.use('/api/images', require('./controllers/images'))

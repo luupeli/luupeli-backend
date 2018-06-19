@@ -4,7 +4,16 @@ const mongoose = require('mongoose')
 const imageSchema = new mongoose.Schema({
     difficulty: String,
     url: String,
-    bone: { type: mongoose.Schema.Types.ObjectId, ref: 'bone' }
+    bone: { type: mongoose.Schema.Types.ObjectId, ref: 'bone' },
+    animal: { type: mongoose.Schema.Types.ObjectId, ref: 'animal' },
+    copyright: String,
+    photographer: String,
+    handedness: String,
+    description: String,
+    lastModified: { type: Date, default: Date.now }, 
+    creationTime: { type: Date, default: Date.now },
+    attempts: Number,
+    correctAttempts: Number
 })
 
 // Formats image from the database to be used in the app
@@ -13,10 +22,16 @@ imageSchema.statics.format = (image) => {
         id: image._id,
         difficulty: image.difficulty,
         url: image.url,
-        //add animal here
-        //and url-lite
-        //and think how to do left/right, copyrights, info
-        bone: image.bone
+        bone: image.bone,
+        animal: image.animal,
+        copyright: image.copyright,
+        photographer: image.photographer,
+        handedness: image.handedness,
+        description: image.description,
+        lastModified: image.lastModified, 
+        creationTime: image.creationTime,
+        attempts: image.attempts,
+        correctAttempts: image.correctAttempts
     }
 }
 

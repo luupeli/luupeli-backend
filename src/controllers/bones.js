@@ -6,8 +6,8 @@ const Image = require('../models/image')
 bonesRouter.get('/', async (request, response) => {
   const bones = await Bone
     .find({})
-    .populate('images', { difficulty: 1, url: 1 })
-    .populate('animal', { name: 1 })
+    .populate('images')
+    .populate('animals', { name: 1 })
     .populate('bodypart', { name: 1 })
   console.log('operation returned bones ', bones)
   response.json(bones.map(Bone.format))
@@ -18,8 +18,8 @@ bonesRouter.get('/:id', async (request, response) => {
   try {
     const bone = await Bone
       .findById(request.params.id)
-      .populate('images', { difficulty: 1, url: 1 })
-      .populate('animal', { name: 1 })
+      .populate('images')
+      .populate('animals', { name: 1 })
       .populate('bodypart', { name: 1 })
     if (bone) {
       response.json(Bone.format(bone))
@@ -48,9 +48,13 @@ bonesRouter.post('/', async (request, response) => {
     const bone = new Bone({
       name: body.name,
       nameLatin: body.nameLatin,
-      images: images,
-      bodypart: body.bodypart,
-      animal: body.animal
+      altNameLatin: body.altNameLatin,
+      images: body.images,
+      bodyPart: body.bodyPart,
+      animals: body.animals,
+      description: body.description,
+      lastModified: body.lastModified,
+      creationTime: body.creationTime
     })
 
     // Connect bone and images if images are given
@@ -100,9 +104,13 @@ bonesRouter.put('/:id', async (request, response) => {
     const bone = {
       name: body.name,
       nameLatin: body.nameLatin,
+      altNameLatin: body.altNameLatin,
       images: oldBone.images,
-      bodypart: body.bodypart,
-      animal: body.animal
+      bodyPart: body.bodyPart,
+      animals: body.animals,
+      description: body.description,
+      lastModified: Date.now(),
+      creationTime: oldBone.creationTime
     }
 
     const updatedBone = await Bone.findByIdAndUpdate(request.params.id, bone, { new: true })

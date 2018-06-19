@@ -2,7 +2,6 @@ const imagesRouter = require('express').Router()
 const Image = require('../models/image')
 const Bone = require('../models/bone')
 const multer = require('multer')
-var fs = require('fs')
 
 // Saves images to server
 const storage = multer.diskStorage({
@@ -35,7 +34,8 @@ function checkFileType(file, cb) {
 imagesRouter.get('/', async (request, response) => {
     const images = await Image
         .find({})
-        .populate('bone', { name: 1, nameLatin: 1, bodypart: 1, animal: 1 })
+        .populate('bone')
+        .populate('animal', { name: 1})
     console.log('operation returned images ', images)
     response.json(images.map(Image.format))
 })
@@ -45,7 +45,8 @@ imagesRouter.get('/:id', async (request, response) => {
     try {
         const image = await Image
             .findById(request.params.id)
-            .populate('bone', { name: 1, nameLatin: 1, bodypart: 1, animal: 1 })
+            .populate('bone')
+            .populate('animal', { name: 1})
         if (image) {
             response.json(Image.format(image))
         } else {
@@ -85,13 +86,23 @@ imagesRouter.post('/', async (request, response) => {
         const image = new Image({
             difficulty: body.difficulty,
             url: body.url,
-            bone: body.bone
+            bone: body.bone,
+            animal: body.animal,
+            copyright: body.copyright,
+            photographer: body.photographer,
+            handedness: body.handedness,
+            description: body.description,
+            lastModified: body.lastModified, 
+            creationTime: body.creationTime,
+            attempts: body.attempts,
+            correctAttempts: body.correctAttempts
         })
         const savedImage = await image.save()
 
         // Connect image and bone if bone is given
         if (body.bone !== undefined) {
             const bone = await Bone.findById(body.bone)
+            console.log(bone)
             bone.images = bone.images.concat(savedImage._id)
             await bone.save()
         }
@@ -130,7 +141,16 @@ imagesRouter.put('/:id', async (request, response) => {
         const image = {
             difficulty: body.difficulty,
             url: oldImage.url,
-            bone: oldImage.bone
+            bone: oldImage.bone,
+            animal: body.animal,
+            copyright: body.copyright,
+            photographer: body.photographer,
+            handedness: body.handedness,
+            description: body.description,
+            lastModified: Date.now(), 
+            creationTime: oldImage.creationTime,
+            attempts: body.attempts,
+            correctAttempts: body.correctAttempts
         }
 
         const updatedImage = await Image.findByIdAndUpdate(request.params.id, image, { new: true })
