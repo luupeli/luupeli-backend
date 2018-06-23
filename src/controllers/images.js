@@ -71,6 +71,7 @@ imagesRouter.post('/upload', (request, response) => {
 })
 
 // Creates a image from given request and saves it to the database
+// image can be created without bone, should we prepare for this?
 imagesRouter.post('/', async (request, response) => {
     try {
         const body = request.body
