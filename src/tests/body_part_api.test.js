@@ -64,6 +64,16 @@ describe('when there are initially some body parts saved', async () => {
 				const partsAfter = await bodyPartsInDb()
 				expect(partsAfter.length).toBe(parts.length + 1)
 			})
+
+			test('does not add a body part without a name', async () => {
+				const parts = await bodyPartsInDb()
+
+				const bp = {}
+				await api.post(url).send(bp).expect(400)
+
+				const partsAfter = await bodyPartsInDb()
+				expect(partsAfter.length).toBe(parts.length)
+			})
 		})
 
 		afterAll(() => {

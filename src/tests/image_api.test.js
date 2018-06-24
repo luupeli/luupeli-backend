@@ -33,7 +33,7 @@ describe('when there is initially some images saved', async () => {
     const anImage = imagesInDatabase[0]
 
     const response = await api
-      .get(url+'/'+anImage.id)
+      .get(url + '/' + anImage.id)
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
@@ -42,7 +42,7 @@ describe('when there is initially some images saved', async () => {
     const validNonexistingId = await nonExistingImageId()
 
     const response = await api
-      .get(url+'/'+validNonexistingId)
+      .get(url + '/' + validNonexistingId)
       .expect(404)
   })
 
@@ -50,7 +50,7 @@ describe('when there is initially some images saved', async () => {
     const invalidId = '7h31m4g3154l13'
 
     const response = await api
-      .get(url+'/'+invalidId)
+      .get(url + '/' + invalidId)
       .expect(404)
   })
 
@@ -77,7 +77,7 @@ describe('when there is initially some images saved', async () => {
 
     test('400 statuscode is returned when POST /api/images is done with missing url', async () => {
       const imagesAtStart = await imagesInDb()
-      const newImage ={
+      const newImage = {
         difficulty: 'hard'
       }
 
@@ -91,7 +91,7 @@ describe('when there is initially some images saved', async () => {
     })
 
     test('400 statuscode is returned when POST /api/images is done with difficulty', async () => {
-      const newImage ={
+      const newImage = {
         url: 'image_without_urljpg'
       }
 
@@ -115,7 +115,7 @@ describe('when there is initially some images saved', async () => {
       imageToBeUpdated.difficulty = 'hard'
 
       await api
-        .put(url+'/'+imageToBeUpdated.id)
+        .put(url + '/' + imageToBeUpdated.id)
         .send(imageToBeUpdated)
         .expect(200)
 
@@ -128,7 +128,7 @@ describe('when there is initially some images saved', async () => {
       const imagesAtStart = await imagesInDb()
       const invalidId = '7h31m4g3154l13'
       let anImage = imagesAtStart[0]
-      
+
       console.log(anImage)
       anImage = {
         id: invalidId,
@@ -137,16 +137,17 @@ describe('when there is initially some images saved', async () => {
 
       console.log(anImage)
       await api
-        .put(url+'/'+invalidId)
+        .put(url + '/' + invalidId)
         .send(anImage)
         .expect(400)
-      
+
       const imagesAfterPut = await imagesInDb()
       const difficulties = imagesAfterPut.map(i => i.difficulty)
       expect(imagesAfterPut.length).toBe(imagesAtStart.length)
       expect(difficulties).not.toContain('extra hard')
     })
   })
+
 
   afterAll(() => {
     server.close()
