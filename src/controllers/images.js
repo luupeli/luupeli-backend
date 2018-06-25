@@ -34,7 +34,7 @@ function checkFileType(file, cb) {
 imagesRouter.get('/', async (request, response) => {
     const images = await Image
         .find({})
-        .populate('bone', { images: 1})
+        .populate('bone')
         .populate('animal', { name: 1})
     console.log('operation returned images ', images)
     response.json(images.map(Image.format))
