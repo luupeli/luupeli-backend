@@ -12,20 +12,20 @@ describe('when there is initially some animals saved', async () => {
 		const animalObjects = initialAnimals.map(a => new Animal(a))
 		await Promise.all(animalObjects.map(a => a.save()))
 	})
-	
-	test('all images are returned as JSON by GET /api/animals', async() => {
+
+	test('all images are returned as JSON by GET /api/animals', async () => {
 		const animalsInDatabase = await animalsInDb()
 		const response = await api
-      .get(url)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+			.get(url)
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
 
 		expect(response.body.length).toBe(animalsInDatabase.length)
-		
+
 		const returnedAnimals = response.body.map(a => a.name)
-    animalsInDatabase.forEach(animal => {
-      expect(returnedAnimals).toContain(animal.name)
-    })
+		animalsInDatabase.forEach(animal => {
+			expect(returnedAnimals).toContain(animal.name)
+		})
 	})
 })
 
@@ -46,6 +46,16 @@ describe('addition of a new animal', async () => {
 		expect(animalsAfterPost.length).toBe(animalsAtStart.length + 1)
 		const names = animalsAfterPost.map(a => a.name)
 		expect(names).toContain('Rotta')
+	})
+
+	test('does not add an animal without a name', async () => {
+		const animals = await animalsInDb()
+
+		const namelessAnimal = {}
+		await api.post(url).send(namelessAnimal).expect(400)
+
+		const animalsAfter = await animalsInDb()
+		expect(animalsAfter.length).toBe(animals.length)
 	})
 
 })

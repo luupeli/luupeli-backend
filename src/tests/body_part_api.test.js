@@ -49,10 +49,35 @@ describe('when there are initially some body parts saved', async () => {
 				expect(returnedParts).toContain(part._id)
 			})
 		})
-	})
 
-	afterAll(() => {
-		server.close()
-	})
+		describe('adding body parts', async () => {
 
+			test('successfully adds a new body part when posting to /api/bodyparts', async () => {
+				const parts = await bodyPartsInDb()
+
+				const bp = {
+					name: "Varvas"
+				}
+
+				await api.post(url).send(bp).expect(200)
+
+				const partsAfter = await bodyPartsInDb()
+				expect(partsAfter.length).toBe(parts.length + 1)
+			})
+
+			test('does not add a body part without a name', async () => {
+				const parts = await bodyPartsInDb()
+
+				const bp = {}
+				await api.post(url).send(bp).expect(400)
+
+				const partsAfter = await bodyPartsInDb()
+				expect(partsAfter.length).toBe(parts.length)
+			})
+		})
+
+		afterAll(() => {
+			server.close()
+		})
+	})
 })

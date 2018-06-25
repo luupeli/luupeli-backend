@@ -146,6 +146,7 @@ describe('when there is initially some bones saved', async () => {
       expect(bonesAfterPut.length).toBe(bonesAtStart.length)
       expect(names).not.toContain('huono iideeluu')
     })
+
   })
 
   describe('deletion of a bone', async () => {
@@ -170,6 +171,14 @@ describe('when there is initially some bones saved', async () => {
       const names = bonesAfterDelete.map(b => b.name)
       expect(names).not.toContain(addedBone.name)
       expect(bonesAfterDelete.length).toBe(bonesAtStart.length - 1)
+    })
+
+    test('status code 400 is returned when trying to delete a nonexistent bone', async () => {
+      const badId = 'ghgryh7'
+
+      await api
+      .delete(url+'/'+badId)
+      .expect(400)
     })
   })
 
