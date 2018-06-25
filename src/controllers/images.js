@@ -34,7 +34,7 @@ function checkFileType(file, cb) {
 imagesRouter.get('/', async (request, response) => {
     const images = await Image
         .find({})
-        .populate('bone')
+        .populate('bone', { images: 1})
         .populate('animal', { name: 1})
     console.log('operation returned images ', images)
     response.json(images.map(Image.format))
@@ -65,7 +65,7 @@ imagesRouter.post('/upload', (request, response) => {
             response.status(400).json({ error: err })
         } else {
             console.log(request)
-            response.json({ url: '/images/' + request.file.filename})
+            response.json({ url: request.file.filename})
         }
     }))
 })
