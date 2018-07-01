@@ -17,8 +17,8 @@
   "scripts": {
     "start": "node ./src/index.js",
     "watch": "nodemon ./src/index.js",
-    "test": "NODE_ENV=test node_modules/.bin/jest --verbose",
-    "testnoverbose": "NODE_ENV=test node_modules/.bin/jest"
+    "test": "NODE_ENV=test node_modules/.bin/jest --verbose --coverage",
+    "testnoverbose": "NODE_ENV=test node_modules/.bin/jest --coverage"
   },
   "devDependencies": {
     "nodemon": "^1.17.5",
