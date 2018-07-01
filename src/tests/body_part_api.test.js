@@ -9,6 +9,7 @@ const url = '/api/bodyparts'
 describe('when there are initially some body parts saved', async () => {
 
 	beforeAll(async () => {
+		jest.setTimeout(30000)
 		await BodyPart.remove({})
 		const parts = initialBodyParts.map(bp => new BodyPart(bp))
 		await Promise.all(parts.map(bp => bp.save()))

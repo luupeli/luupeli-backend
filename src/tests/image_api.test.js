@@ -8,6 +8,7 @@ const url = '/api/images'
 
 describe('when there is initially some images saved', async () => {
   beforeAll(async () => {
+    jest.setTimeout(30000)
     await Image.remove({})
     const imageObjects = initialImages.map(i => new Image(i))
     await Promise.all(imageObjects.map(i => i.save()))

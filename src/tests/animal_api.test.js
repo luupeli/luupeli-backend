@@ -8,6 +8,7 @@ const url = '/api/animals'
 
 describe('when there is initially some animals saved', async () => {
 	beforeAll(async () => {
+		jest.setTimeout(30000)
 		await Animal.remove({})
 		const animalObjects = initialAnimals.map(a => new Animal(a))
 		await Promise.all(animalObjects.map(a => a.save()))
