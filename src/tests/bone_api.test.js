@@ -5,10 +5,10 @@ const Bone = require('../models/bone')
 const { formatBone, initialBones, bonesInDb, nonExistingBoneId } = require('./bone_test_helper')
 
 const url = '/api/bones'
- 
+
 describe('when there is initially some bones saved', async () => {
   beforeAll(async () => {
-    jest.setTimeout(30000)
+    // jest.setTimeout(30000)
     await Bone.remove({})
     const boneObjects = initialBones.map(b => new Bone(b))
     await Promise.all(boneObjects.map(b => b.save()))
@@ -34,7 +34,7 @@ describe('when there is initially some bones saved', async () => {
     const aBone = bonesInDatabase[0]
 
     const response = await api
-      .get(url+'/'+aBone.id)
+      .get(url + '/' + aBone.id)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
@@ -43,9 +43,9 @@ describe('when there is initially some bones saved', async () => {
 
   test('404 status is returned when GET /api/bones/:id is done with nonexistent valid id', async () => {
     const validNonexistingId = await nonExistingBoneId()
-    
+
     const response = await api
-      .get(url+'/'+validNonexistingId)
+      .get(url + '/' + validNonexistingId)
       .expect(404)
   })
 
@@ -53,7 +53,7 @@ describe('when there is initially some bones saved', async () => {
     const invalidId = '7h3b0n3154l13'
 
     const response = await api
-      .get(url+'/'+invalidId)
+      .get(url + '/' + invalidId)
       .expect(404)
   })
 
@@ -111,15 +111,15 @@ describe('when there is initially some bones saved', async () => {
   })
 
   describe('updating a bone', async () => {
-    
-    test('suffesfully updates a bone by PUT /bone/api/:id with correct statuscode', async () => {
+
+    test('suffesfully updates a bone by PUT /api/bone/:id with correct statuscode', async () => {
       const bonesAtStart = await bonesInDb()
       let boneToBeUpdated = bonesAtStart[0]
 
       boneToBeUpdated.name = 'new bone'
 
       await api
-        .put(url+'/'+boneToBeUpdated.id)
+        .put(url + '/' + boneToBeUpdated.id)
         .send(boneToBeUpdated)
         .expect(200)
 
@@ -130,18 +130,18 @@ describe('when there is initially some bones saved', async () => {
     })
 
     test('400 statuscode is returned when PUT /api/bones/:id is done with malformatted id', async () => {
-      const bonesAtStart = await bonesInDb() 
+      const bonesAtStart = await bonesInDb()
       const invalidId = '7h3b0n3154l13'
       const aBone = {
-         name: 'huono iideeluu',
-         nameLatin: 'ossis vilis id'
+        name: 'huono iideeluu',
+        nameLatin: 'ossis vilis id'
       }
 
       await api
-        .put(url+'/'+invalidId)
+        .put(url + '/' + invalidId)
         .send(aBone)
         .expect(400)
-      
+
       const bonesAfterPut = await bonesInDb()
       const names = bonesAfterPut.map(b => b.name)
       expect(bonesAfterPut.length).toBe(bonesAtStart.length)
@@ -165,7 +165,7 @@ describe('when there is initially some bones saved', async () => {
       const bonesAtStart = await bonesInDb()
 
       await api
-        .delete(url+'/'+addedBone._id)
+        .delete(url + '/' + addedBone._id)
         .expect(204)
 
       const bonesAfterDelete = await bonesInDb()
@@ -178,8 +178,8 @@ describe('when there is initially some bones saved', async () => {
       const badId = 'ghgryh7'
 
       await api
-      .delete(url+'/'+badId)
-      .expect(400)
+        .delete(url + '/' + badId)
+        .expect(400)
     })
   })
 
@@ -187,5 +187,5 @@ describe('when there is initially some bones saved', async () => {
   afterAll(() => {
     server.close()
   })
-  
+
 })
