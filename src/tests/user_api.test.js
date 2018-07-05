@@ -15,6 +15,25 @@ describe.only('when there is initially one user in database', async () => {
     await Promise.all(userObjects.map(u => u.save()))
   })
 
+  test('an individual existing user is returned with status code 200 by GET /api/users/:id', async () => {
+    const users = await usersInDb()
+    const user = users[0]
+
+    const response = await api
+      .get(url + '/' + user.id)
+      .expect(200)
+
+    expect(response.body.username).toBe(user.username)
+  })
+
+  test('status code 404 is returned when attempting to GET /api/users/:id where id is nonexistent', async () => {
+    const badId = "n0n3x15t3nt"
+
+    const response = await api
+      .get(url + '/' + badId)
+      .expect(404)
+  })
+
   describe('addition of a new user', async () => {
 
     test('succesfully adds valid user by POST /api/users', async () => {
@@ -178,9 +197,9 @@ describe.only('when there is initially one user in database', async () => {
 
     test('400 statuscode is returned when PUT /api/users is done with existing username', async () => {
       const usersAtStart = await usersInDb()
+      let someUser = usersAtStart[0]
       let userToBeUpdated = usersAtStart[1]
-      console.log(userToBeUpdated)
-      userToBeUpdated.username = 'humerus'
+      userToBeUpdated.username = someUser.username
 
       await api
         .put(url + '/' + userToBeUpdated.id)

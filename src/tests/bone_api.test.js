@@ -115,6 +115,7 @@ describe('when there is initially some bones saved', async () => {
     test('suffesfully updates a bone by PUT /api/bone/:id with correct statuscode', async () => {
       const bonesAtStart = await bonesInDb()
       let boneToBeUpdated = bonesAtStart[0]
+      let oldName = boneToBeUpdated.name
 
       boneToBeUpdated.name = 'new bone'
 
@@ -126,7 +127,7 @@ describe('when there is initially some bones saved', async () => {
       const bonesAfterPut = await bonesInDb()
       const names = bonesAfterPut.map(b => b.name)
       expect(names).toContain('new bone')
-      expect(names).not.toContain('ensimmäinen luu')
+      expect(names).not.toContain(oldName)
     })
 
     test('400 statuscode is returned when PUT /api/bones/:id is done with malformatted id', async () => {
