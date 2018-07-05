@@ -8,6 +8,7 @@ const url = '/api/users'
 
 describe.only('when there is initially one user in database', async () => {
   beforeAll(async () => {
+    jest.setTimeout(30000)
     await User.remove({})
     const userObjects = initialUsers.map(u => new User(u))
     // await Promise.all(userObjects.map(u => u.save()))
@@ -193,7 +194,41 @@ describe.only('when there is initially one user in database', async () => {
   })
 
   describe('deletion of a user', async () => {
+    let newUser
 
+    beforeAll(async () => {
+      newUser = new User({
+        username: 'luumuumi',
+        password: 'ananaspizza8'
+      })
+      await newUser.save()
+    })
+
+    test('status code 204 is returned when successfully deleting a user', async () => {
+
+      const users = await usersInDb()
+
+      await api
+        .delete(url + '/' + newUser._id)
+        .expect(204)
+
+      const usersNow = await usersInDb()
+      expect(usersNow.length).toBe(users.length - 1)
+
+    })
+
+    test('status code 400 is returned when attempting to delete a nonexistent user', async () => {
+
+      const badId = "1a2b3c"
+      const users = await usersInDb()
+
+      await api
+        .delete(url + '/' + badId)
+        .expect(400)
+
+      const usersNow = await usersInDb()
+      expect(usersNow.length).toBe(users.length)
+    })
   })
 
   afterAll(() => {

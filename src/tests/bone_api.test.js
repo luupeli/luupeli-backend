@@ -8,7 +8,7 @@ const url = '/api/bones'
 
 describe('when there is initially some bones saved', async () => {
   beforeAll(async () => {
-    // jest.setTimeout(30000)
+   jest.setTimeout(30000)
     await Bone.remove({})
     const boneObjects = initialBones.map(b => new Bone(b))
     await Promise.all(boneObjects.map(b => b.save()))
