@@ -2,7 +2,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const User = require('../models/user')
-const { usersInDb, initialUsers } = require('./user_test_helper')
+const { usersInDb, initialUsers1 } = require('./user_test_helper')
 
 const url = '/api/users'
 
@@ -10,8 +10,7 @@ describe.only('when there is initially one user in database', async () => {
   beforeAll(async () => {
     jest.setTimeout(30000)
     await User.remove({})
-    const userObjects = initialUsers.map(u => new User(u))
-    // await Promise.all(userObjects.map(u => u.save()))
+    const userObjects = initialUsers1.map(u => new User(u))
     await Promise.all(userObjects.map(u => u.save()))
   })
 
@@ -140,7 +139,7 @@ describe.only('when there is initially one user in database', async () => {
     test('succesfully updates username of a user by PUT /api/user/:id with correct statuscode', async () => {
       const usersAtStart = await usersInDb()
       let userToBeUpdated = usersAtStart[0]
-
+      const oldUsername = userToBeUpdated.username
       userToBeUpdated.username = 'luidenharrastelija69'
 
       await api
@@ -151,7 +150,7 @@ describe.only('when there is initially one user in database', async () => {
       const usersAfterPut = await usersInDb()
       const usernames = usersAfterPut.map(u => u.username)
       expect(usernames).toContain('luidenharrastelija69')
-      expect(usernames).not.toContain('luidenharrastelija')
+      expect(usernames).not.toContain(oldUsername)
     })
 
     test('succesfully updates password of a user by PUT /api/user/:id with correct statuscode', async () => {
@@ -177,7 +176,7 @@ describe.only('when there is initially one user in database', async () => {
       const usersAtStart = await usersInDb()
       let userToBeUpdated = usersAtStart[0]
       const oldHash = userToBeUpdated.passwordHash
-      const oldName = userToBeUpdated.username
+      const oldUsername = userToBeUpdated.username
       userToBeUpdated.username = 'ennemminnyrkkiperseessakuinopiskellaluita'
       userToBeUpdated.password = 'uusisalasana123'
 
@@ -189,7 +188,7 @@ describe.only('when there is initially one user in database', async () => {
       const usersAfterPut = await usersInDb()
       const usernames = usersAfterPut.map(u => u.username)
       expect(usernames).toContain(userToBeUpdated.username)
-      expect(usernames).not.toContain(oldName)
+      expect(usernames).not.toContain(oldUsername)
       // Didn't come up with any valid way to check if the password changed
       // const hashes = usersAfterPut.map(u => u.passwordHash)
       // expect(hashes).not.toContain(oldHash)
@@ -199,6 +198,7 @@ describe.only('when there is initially one user in database', async () => {
       const usersAtStart = await usersInDb()
       let someUser = usersAtStart[0]
       let userToBeUpdated = usersAtStart[1]
+      const oldUsername = userToBeUpdated.username
       userToBeUpdated.username = someUser.username
 
       await api
@@ -208,7 +208,7 @@ describe.only('when there is initially one user in database', async () => {
 
       const usersAfterPut = await usersInDb()
       const usernames = usersAfterPut.map(u => u.username)
-      expect(usernames).toContain('luidenharrastelija69')
+      expect(usernames).toContain(oldUsername)
     })
   })
 

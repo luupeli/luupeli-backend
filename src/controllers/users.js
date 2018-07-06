@@ -29,7 +29,7 @@ usersRouter.get('/:id', async (request, response) => {
 
 // Creates a user from given request and saves it to the database
 // Uses bcrypt for password hashing
-// Username must be unique and longer or equal to 3 alphanumeric characters
+// Username must be unique and longer or equal to 3 alphanumerical characters
 // Password must be longer or equal to 8 characters
 usersRouter.post('/', async (request, response) => {
   try {
