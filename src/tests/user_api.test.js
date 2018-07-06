@@ -56,7 +56,7 @@ describe.only('when there is initially one user in database', async () => {
       expect(usernames).toContain('tykkaanluista')
     })
 
-    test('400 statuscode is returned when POST /api/users is done with missing name', async () => {
+    test('status code 400 is returned when attempting to POST /api/users is done with missing name', async () => {
       const usersAtStart = await usersInDb()
       const newUser = {
         password: 'entykkaaluista'
@@ -71,7 +71,7 @@ describe.only('when there is initially one user in database', async () => {
       expect(usersAfterPost.length).toBe(usersAtStart.length)
     })
 
-    test('400 statuscode is returned when POST /api/users is done with missing password', async () => {
+    test('status code 400 is returned when attempting to POST /api/users is done with missing password', async () => {
       const usersAtStart = await usersInDb()
       const newUser = {
         username: 'nomorebones'
@@ -86,7 +86,7 @@ describe.only('when there is initially one user in database', async () => {
       expect(usersAfterPost.length).toBe(usersAtStart.length)
     })
 
-    test('400 statuscode is returned when POST /api/users is done with insufficient username', async () => {
+    test('status code 400 is returned when attempting to POST /api/users is done with insufficient username', async () => {
       const usersAtStart = await usersInDb()
       const newUser = {
         username: 'lu',
@@ -102,7 +102,7 @@ describe.only('when there is initially one user in database', async () => {
       expect(usersAfterPost.length).toBe(usersAtStart.length)
     })
 
-    test('400 statuscode is returned when POST /api/users is done with insufficient password', async () => {
+    test('status code 400 is returned when attempting to POST /api/users is done with insufficient password', async () => {
       const usersAtStart = await usersInDb()
       const newUser = {
         username: 'luumies',
@@ -118,7 +118,7 @@ describe.only('when there is initially one user in database', async () => {
       expect(usersAfterPost.length).toBe(usersAtStart.length)
     })
 
-    test('400 statuscode is returned when POST /api/users is done with malformatted username', async () => {
+    test('status code 400 is returned when attempting to POST /api/users is done with malformatted username', async () => {
       const usersAtStart = await usersInDb()
       const newUser = {
         username: 'xXx_.#luumies420_xXx',
@@ -195,7 +195,7 @@ describe.only('when there is initially one user in database', async () => {
       // expect(hashes).not.toContain(oldHash)
     })
 
-    test('400 statuscode is returned when PUT /api/users is done with existing username', async () => {
+    test('status code 400 is returned when attempting to PUT /api/users is done with existing username', async () => {
       const usersAtStart = await usersInDb()
       let someUser = usersAtStart[0]
       let userToBeUpdated = usersAtStart[1]
