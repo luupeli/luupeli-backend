@@ -8,7 +8,7 @@ loginRouter.post('/', async (request, response) => {
   // Creates a variable from sent request
   const body = request.body
   // Tries to find an user corresponding to sent username from the database
-  const user = await User.findOne({ username: body.username })
+  const user = await User.findOne({ username: body.username.toLowerCase() })
   // Checks if sent password matches the hashed password stored in the database
   const passwordCorrect = user === null ?
     false : await bcrypt.compare(body.password, user.passwordHash)

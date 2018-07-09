@@ -52,6 +52,7 @@ usersRouter.post('/', async (request, response) => {
     }
     let email
     const passwordHash = await bcrypt.hash(body.password, saltRounds)
+    // Sets email to null if none is given
     if (!body.email === undefined) {
       email = body.email
     } else { email = null }
