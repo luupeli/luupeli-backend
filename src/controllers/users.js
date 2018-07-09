@@ -50,10 +50,14 @@ usersRouter.post('/', async (request, response) => {
     } else if (!body.username.match(alphanumericalRegExpPattern)) {
       return response.status(400).json({ error: 'username must contain only alphanumerical characters a-z, 0-9' })
     }
-
+    let email
     const passwordHash = await bcrypt.hash(body.password, saltRounds)
+    if (!body.email === undefined) {
+      email = body.email
+    } else { email = null }
     const user = new User({
       username: body.username.toLowerCase(),
+      email,
       passwordHash
     })
 
