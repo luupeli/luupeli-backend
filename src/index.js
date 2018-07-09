@@ -8,10 +8,10 @@ const config = require('./utils/config')
 // Connect to the database and log status
 mongoose
   .connect(config.dbUrl)
-  .then( () => {
+  .then(() => {
     console.log('connected to database', config.dbUrl)
   })
-  .catch( err => {
+  .catch(err => {
     console.log(err)
   })
 
