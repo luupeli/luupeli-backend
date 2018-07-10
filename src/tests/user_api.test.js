@@ -177,7 +177,7 @@ describe.only('when there is initially one user in database', async () => {
       let userToBeUpdated = usersAtStart[0]
       const oldHash = userToBeUpdated.passwordHash
       const oldUsername = userToBeUpdated.username
-      userToBeUpdated.username = 'ennemminnyrkkiperseessakuinopiskellaluita'
+      userToBeUpdated.username = 'ennemminasualohjallakuinopiskellaluita'
       userToBeUpdated.password = 'uusisalasana123'
 
       await api
