@@ -1,34 +1,13 @@
 const imagesRouter = require('express').Router()
 const Image = require('../models/image')
 const Bone = require('../models/bone')
-const multer = require('multer')
+const cloudinary = require('cloudinary')
 
-// Saves images to server
-const storage = multer.diskStorage({
-    destination: './public/images/',
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname)
-    }
-});
-const upload = multer({ 
-    storage: storage,
-    limits:{fileSize: 5000000},
-    fileFilter: function(req, file, cb){
-        checkFileType(file, cb)
-    }
-}).single('image');
-
-function checkFileType(file, cb) {
-    const filetypes = /jpeg|jpg|png|gif/
-    const extname = filetypes.test(file.originalname.toLowerCase())
-    const mimetype = filetypes.test(file.mimetype)
-
-    if(mimetype && extname) {
-        return cb(null, true)
-    } else {
-        cb('Error: Images only!')
-    }
-}
+cloudinary.config({ 
+    cloud_name: 'luupeli', 
+    api_key: process.env.CLOUDINARY_KEY, 
+    api_secret: process.env.CLOUDINARY_SECRET 
+  })
 
 // Finds all images from database after GET-request and returns in JSON
 imagesRouter.get('/', async (request, response) => {
@@ -58,16 +37,16 @@ imagesRouter.get('/:id', async (request, response) => {
     }
 })
 
-// Saves image to folder /images/ and return image url
+// Saves image to Cloudinary and return image url
 imagesRouter.post('/upload', (request, response) => {
-    upload(request, response, (err => {
-        if (err) {
-            response.status(400).json({ error: err })
+    cloudinary.uploader.upload(request.body.source, function(result, error) { 
+        if (error) {
+            response.status(400).json({ error: error })
         } else {
-            console.log(request)
-            response.json({ url: request.file.filename})
-        }
-    }))
+            console.log(result) 
+            response.json({ url: result.url })
+        }  
+    });
 })
 
 // Creates a image from given request and saves it to the database
