@@ -6,7 +6,7 @@ const cloudinary = require('cloudinary')
 
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname)
+        cb(null, file.originalname)
     }
 });
 const upload = multer({
@@ -78,7 +78,7 @@ imagesRouter.get('/:id', async (request, response) => {
 
 imagesRouter.post('/upload', upload.single('image'), (request, response) => {
     cloudinary.uploader.upload(request.file.path, function (result) {
-        response.json({ url: result.url })
+        response.json({ url: result.public_id })
     })
 })
 
