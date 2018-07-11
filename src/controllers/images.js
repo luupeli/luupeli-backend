@@ -1,20 +1,46 @@
 const imagesRouter = require('express').Router()
 const Image = require('../models/image')
 const Bone = require('../models/bone')
+const multer = require('multer')
 const cloudinary = require('cloudinary')
 
-cloudinary.config({ 
-    cloud_name: 'luupeli', 
-    api_key: process.env.CLOUDINARY_KEY, 
-    api_secret: process.env.CLOUDINARY_SECRET 
-  })
+const storage = multer.diskStorage({
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname)
+    }
+});
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5000000 },
+    fileFilter: function (req, file, cb) {
+        checkFileType(file, cb)
+    }
+})
+
+function checkFileType(file, cb) {
+    const filetypes = /jpeg|jpg|png|gif/
+    const extname = filetypes.test(file.originalname.toLowerCase())
+    const mimetype = filetypes.test(file.mimetype)
+
+    if (mimetype && extname) {
+        return cb(null, true)
+    } else {
+        cb('Error: Images only!')
+    }
+}
+
+cloudinary.config({
+    cloud_name: 'luupeli',
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
+})
 
 // Finds all images from database after GET-request and returns in JSON
 imagesRouter.get('/', async (request, response) => {
     const images = await Image
         .find({})
         .populate('bone')
-        .populate('animal', { name: 1})
+        .populate('animal', { name: 1 })
     console.log('operation returned images ', images)
     response.json(images.map(Image.format))
 })
@@ -25,7 +51,7 @@ imagesRouter.get('/:id', async (request, response) => {
         const image = await Image
             .findById(request.params.id)
             .populate('bone')
-            .populate('animal', { name: 1})
+            .populate('animal', { name: 1 })
         if (image) {
             response.json(Image.format(image))
         } else {
@@ -38,7 +64,8 @@ imagesRouter.get('/:id', async (request, response) => {
 })
 
 // Saves image to Cloudinary and return image url
-imagesRouter.post('/upload', (request, response) => {
+/* imagesRouter.post('/upload', (request, response) => {
+    console.log(request.source)
     cloudinary.uploader.upload(request.body.source, function(result, error) { 
         if (error) {
             response.status(400).json({ error: error })
@@ -47,7 +74,14 @@ imagesRouter.post('/upload', (request, response) => {
             response.json({ url: result.url })
         }  
     });
+})*/
+
+imagesRouter.post('/upload', upload.single('image'), (request, response) => {
+    cloudinary.uploader.upload(request.file.path, function (result) {
+        response.json({ url: result.url })
+    })
 })
+
 
 // Creates a image from given request and saves it to the database
 // image can be created without bone, should we prepare for this?
@@ -72,7 +106,7 @@ imagesRouter.post('/', async (request, response) => {
             photographer: body.photographer,
             handedness: body.handedness,
             description: body.description,
-            lastModified: Date.now(), 
+            lastModified: Date.now(),
             creationTime: Date.now(),
             attempts: body.attempts,
             correctAttempts: body.correctAttempts
@@ -127,7 +161,7 @@ imagesRouter.put('/:id', async (request, response) => {
             photographer: body.photographer,
             handedness: body.handedness,
             description: body.description,
-            lastModified: Date.now(), 
+            lastModified: Date.now(),
             creationTime: oldImage.creationTime,
             attempts: body.attempts,
             correctAttempts: body.correctAttempts
