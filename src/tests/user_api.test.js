@@ -39,7 +39,8 @@ describe.only('when there is initially one user in database', async () => {
       const usersAtStart = await usersInDb()
 
       const newUser = {
-        username: 'tykkaanluista',
+        username: 'tykkaanluistajee',
+        email: 'pussipiru@luu.lul',
         password: 'luuluuluu'
       }
 
@@ -53,6 +54,7 @@ describe.only('when there is initially one user in database', async () => {
       expect(usersAfterPost.length).toBe(usersAtStart.length + 1)
       const usernames = usersAfterPost.map(u => u.username)
       expect(usernames).toContain('tykkaanluista')
+
     })
 
     test('status code 400 is returned when attempting to POST /api/users is done with missing name', async () => {

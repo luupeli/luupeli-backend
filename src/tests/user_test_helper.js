@@ -9,14 +9,17 @@ const usersInDb = async () => {
 const initialUsers1 = [
   {
     username: 'luidenharrastelija',
+    email: 'pussipiru@luu.kek',
     passwordHash: '$2a$07$48pL4qjrKCnpyQLaneYB.OJ7PWjt3LUC7YV4nQRuqPt7MC2v666KC'
   },
   {
     username: 'bonelover',
+    email: 'kaasukettu@kek.luu',
     passwordHash: '$2a$07$Mv0ITU2QUo6xM7lhlobyOeIAGc8Gpi49KoKRLd18Qsk7CdQ0QnmB6'
   },
   {
     username: 'humerus',
+    email: 'rusinarousku@luu.lel',
     passwordHash: '$2a$07$tUm4BfxHIJxN3SP3b8v1MO.TTVjUbwzD124IIuBbQ3yqrmjJt4uJe'
   }
 ]
