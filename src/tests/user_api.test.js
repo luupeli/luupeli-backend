@@ -35,12 +35,11 @@ describe.only('when there is initially one user in database', async () => {
 
   describe('addition of a new user', async () => {
 
-    test('succesfully adds valid user by POST /api/users', async () => {
+    test('succesfully adds valid user by POST /api/users without an email', async () => {
       const usersAtStart = await usersInDb()
 
       const newUser = {
         username: 'tykkaanluistajee',
-        email: 'pussipiru@luu.lul',
         password: 'luuluuluu'
       }
 
@@ -52,8 +51,36 @@ describe.only('when there is initially one user in database', async () => {
 
       const usersAfterPost = await usersInDb()
       expect(usersAfterPost.length).toBe(usersAtStart.length + 1)
+
       const usernames = usersAfterPost.map(u => u.username)
-      expect(usernames).toContain('tykkaanluista')
+      expect(usernames).toContain('tykkaanluistajee')
+
+      var i
+      for (i = 0; i < usersAfterPost.length; i++) {
+        if (usersAfterPost[i].username === 'tykkaanluistajee') {
+          expect(usersAfterPost[i].email).toBe(null)
+        }
+      }
+    })
+
+    test('succesfully adds valid user by POST /api/users with an email', async () => {
+      const usersAtStart = await usersInDb()
+
+      const newUser = {
+        username: 'sukkasaukko',
+        email: 'leluelukka@luu.lol',
+        password: 'kissakiisseli'
+      }
+
+      await api
+        .post(url)
+        .send(newUser)
+
+      const usersAfterPost = await usersInDb()
+      expect(usersAfterPost.length).toBe(usersAtStart.length + 1)
+
+      const emails = usersAfterPost.map(u => u.email)
+      expect(emails).toContain('leluelukka@luu.lol')
 
     })
 
