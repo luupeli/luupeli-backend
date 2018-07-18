@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const userSchema = mongoose.Schema({
   username: { type: String, unique: true },
   email: {type: String},
-  passwordHash: { type: String }
+  passwordHash: { type: String },
+  role: String
 })
 
 userSchema.statics.format = (user) => {
@@ -11,7 +12,9 @@ userSchema.statics.format = (user) => {
     id: user._id,
     username: user.username,
     email: user.email,
-    passwordHash: user.passwordHash
+    passwordHash: user.passwordHash,
+    role: user.role
+    
   }
 }
 
