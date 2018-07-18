@@ -14,7 +14,6 @@ userSchema.statics.format = (user) => {
     email: user.email,
     passwordHash: user.passwordHash,
     role: user.role
-    
   }
 }
 

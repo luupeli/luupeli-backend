@@ -60,7 +60,7 @@ usersRouter.post('/', async (request, response) => {
       username: body.username.toLowerCase(),
       email,
       passwordHash,
-      role: 'user'
+      role: "user"
     })
 
     const savedUser = await user.save()
