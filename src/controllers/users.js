@@ -52,6 +52,7 @@ usersRouter.post('/', async (request, response) => {
     }
     let email
     const passwordHash = await bcrypt.hash(body.password, saltRounds)
+    const assignedRole = "USER"
     // Sets email to null if none is given
     if (body.email != undefined) {
       email = body.email
@@ -60,7 +61,7 @@ usersRouter.post('/', async (request, response) => {
       username: body.username.toLowerCase(),
       email,
       passwordHash,
-      role: "user"
+      role: assignedRole
     })
 
     const savedUser = await user.save()
