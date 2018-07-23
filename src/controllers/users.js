@@ -8,7 +8,7 @@ const alphanumericalRegExpPattern = new RegExp(/^[a-zA-Z0-9_]*$/)
 // Finds all users from database after GET-request and returns in JSON
 usersRouter.get('/', async (request, response) => {
   const users = await User.find({})
-  response.json(users.map(User.format)
+  response.json(users.map(User.format))
 })
 
 // Finds and returns one user in JSON
