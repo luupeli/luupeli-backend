@@ -19,7 +19,8 @@ loginRouter.post('/', async (request, response) => {
   // Otherwise an object is created for the token
   const userForToken = {
     username: user.username,
-    id: user._id
+    id: user._id,
+    role: user.role
   }
   // And lastly a token object is created and signed with jwt-library
   // The token is signed with a SECRET process environment variable
