@@ -1,6 +1,7 @@
 mongoose = require('mongoose')
 
 const gameSessionSchema = new mongoose.Schema({
+    user: String,
     mode: String,
     length: Number,
     difficulty: String,
