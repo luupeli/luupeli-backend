@@ -1,7 +1,7 @@
 mongoose = require('mongoose')
 
 const gameSessionSchema = new mongoose.Schema({
-    user: String,
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
     mode: String,
     length: Number,
     difficulty: String,
