@@ -4,7 +4,7 @@ const GameSession = require('../models/gameSession')
 gameSessionsRouter.get('/', async(request, response) => {
 	const gameSessions = await GameSession
 		.find({})
-		.populate('user', {username: 1})
+		.populate('user', {user: 1})
 
 	response.json(gameSessions.map(GameSession.format))
 })
@@ -13,7 +13,7 @@ gameSessionsRouter.get('/:id', async(request, response) => {
 	try {
 		const gameSession = await GameSession
 			.findById(request.params.id)
-			.populate('user', {username: 1})
+			.populate('user', {user: 1})
 
 		if (gameSession) {
 			response.json(GameSession.format(gameSession))
