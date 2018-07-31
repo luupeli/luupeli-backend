@@ -35,7 +35,8 @@ const initialUsers2 = [
   },
   {
     username: 'zizek',
-    passwordHash: '$2a$07$Iht66dX4FFykLsUVAvB/WOSV/.DzN1mNR3bz2tPbhxucbHA2VSNau'
+    passwordHash: '$2a$07$Iht66dX4FFykLsUVAvB/WOSV/.DzN1mNR3bz2tPbhxucbHA2VSNau',
+    role: 'ADMIN'
   }
 ]
 
