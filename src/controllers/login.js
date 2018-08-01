@@ -26,7 +26,7 @@ loginRouter.post('/', async (request, response) => {
   // The token is signed with a SECRET process environment variable
   // 200 status code is sent with the token
   const token = jwt.sign(userForToken, process.env.SECRET)
-  response.status(200).send({ token, username: user.username, role: user.role })
+  response.status(200).send({ token, username: user.username, role: user.role, id: user._id })
 })
 
 module.exports = loginRouter
