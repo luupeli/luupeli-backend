@@ -112,7 +112,7 @@ describe('when there is initially some bones saved', async () => {
 
   describe('updating a bone', async () => {
 
-    test('suffesfully updates a bone by PUT /api/bone/:id with correct statuscode', async () => {
+    test('successfully updates a bone by PUT /api/bone/:id with correct statuscode', async () => {
       const bonesAtStart = await bonesInDb()
       let boneToBeUpdated = bonesAtStart[0]
       let oldName = boneToBeUpdated.name

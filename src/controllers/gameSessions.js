@@ -32,7 +32,23 @@ gameSessionsRouter.get('/:id', async(request, response) => {
 
 gameSessionsRouter.post('/', async(request, response) => {
 	try {
-		const body = request.body
+    const body = request.body
+    
+    if (body.user === undefined) {
+      return response.status(400).json({ error: 'user missing' })
+    } else if (body.animals === undefined) {
+      return response.status(400).json({ error: 'animals missing' })
+    } else if (body.bodyParts === undefined) {
+      return response.status(400).json({ error: 'bodyparts missing' })
+    } else if (body.mode === undefined) {
+      return response.status(400).json({ error: 'game mode missing' })
+    } else if (body.length === undefined) {
+      return response.status(400).json({ error: 'game length missing' })
+    } else if (body.correctAnswerCount === undefined) {
+      return response.status(400).json({ error: 'count for correct answers missing' })
+    } else if (body.almostCorrectAnswerCount === undefined) {
+      return response.status(400).json({ error: 'count for almost correct answers missing' })
+    }
 
 		const gameSession = new GameSession({
 			user: body.user,
