@@ -15,4 +15,14 @@ const getAdminTokens = async () => {
   return adminTokens
 }
 
-module.exports = getAdminTokens
+const getToken = async (user) => {
+  const adminForToken = {
+    username: user.username,
+    id: user._id,
+    role: user.role
+  }
+  return jwt.sign(adminForToken, process.env.SECRET)
+}
+
+
+module.exports = { getAdminTokens, getToken }

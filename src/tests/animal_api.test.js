@@ -5,7 +5,7 @@ const Animal = require('../models/animal')
 const { formatAnimal, initialAnimals, animalsInDb } = require('./animal_test_helper')
 const { initialUsers2 } = require('./user_test_helper')
 const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+const { getToken } = require('../utils/adminJWTs')
 
 const url = '/api/animals'
 
@@ -40,15 +40,9 @@ describe('when there is initially some animals saved', async () => {
 		describe('when an admin token is sent with the request', async () => {
 
 			test('succesfully adds valid animal by POST /api/animals', async () => {
-				const admin = await User.findOne({ username: 'zizek' })
-				const adminForToken = {
-					username: admin.username,
-					id: admin._id,
-					role: admin.role
-				}
-				const token = jwt.sign(adminForToken, process.env.SECRET)
-				
 				const animalsAtStart = await animalsInDb()
+				const user = await User.findOne({ username: 'zizek' })
+				const token = getToken(user)
 				const animal = {
 					name: 'Rotta'
 				}
@@ -65,17 +59,14 @@ describe('when there is initially some animals saved', async () => {
 			})
 
 			test('does not add an animal without a name', async () => {
-				const admin = await User.findOne({ username: 'zizek' })
-				const adminForToken = {
-					username: admin.username,
-					id: admin._id,
-					role: admin.role
-				}
-				const token = jwt.sign(adminForToken, process.env.SECRET)
 				const animals = await animalsInDb()
-
+				const user = await User.findOne({ username: 'zizek' })
+				const token = getToken(user)
 				const animal = {}
-				await api.post(url).send({ animal, token: token }).expect(400)
+				await api
+					.post(url)
+					.send({ animal, token: token })
+					.expect(400)
 
 				const animalsAfter = await animalsInDb()
 				expect(animalsAfter.length).toBe(animals.length)
@@ -99,4 +90,3 @@ describe('when there is initially some animals saved', async () => {
 		server.close()
 	})
 })
-

@@ -1,6 +1,6 @@
 const animalsRouter = require('express').Router()
 const Animal = require('../models/animal')
-const adminTokensJWT = require('../utils/adminJWTs')
+const { getAdminTokens } = require('../utils/adminJWTs')
 
 // Finds all animals from database after GET-request and returns in JSON
 animalsRouter.get('/', async (request, response) => {
@@ -14,15 +14,10 @@ animalsRouter.get('/', async (request, response) => {
 animalsRouter.post('/', async (request, response) => {
   try {
     const body = request.body
-    const adminTokens = await adminTokensJWT()
-    console.log(adminTokens)
-    console.log(body.token)
-    console.log(adminTokens.includes(body.token))
-    console.log(body)
+    const adminTokens = await getAdminTokens()
     if (adminTokens.includes(body.token) === false) {
       return response.status(401).json({ error: 'unauthorized' })
-    }
-    if (body.animal.name === undefined) {
+    } else if (body.animal.name === undefined) {
       return response.status(400).json({ error: 'name missing' })
     }
 

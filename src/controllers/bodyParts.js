@@ -1,5 +1,6 @@
 const bodyPartRouter = require('express').Router()
 const BodyPart = require('../models/bodyPart')
+const { getAdminTokens } = require('../utils/adminJWTs')
 
 // Finds all body parts from database after GET-request and returns in JSON
 bodyPartRouter.get('/', async (request, response) => {
@@ -13,12 +14,15 @@ bodyPartRouter.get('/', async (request, response) => {
 bodyPartRouter.post('/', async (request, response) => {
   try {
     const body = request.body
-    if (body.name === undefined) {
+    const adminTokens = await getAdminTokens()
+    if (adminTokens.includes(body.token) === false) {
+      return response.status(401).json({ error: 'unauthorized' })
+    } else if (body.bodypart.name === undefined) {
       return response.status(400).json({ error: 'name missing' })
     }
 
     const bodyPart = new BodyPart({
-      name: body.name
+      name: body.bodypart.name
     })
 
     const savedBodyPart = await bodyPart.save()
