@@ -15,13 +15,14 @@ const getAdminTokens = async () => {
   return adminTokens
 }
 
-const getToken = async (user) => {
+const getToken = (user) => {
   const adminForToken = {
     username: user.username,
     id: user._id,
     role: user.role
   }
-  return jwt.sign(adminForToken, process.env.SECRET)
+  const token = jwt.sign(adminForToken, process.env.SECRET)
+  return token
 }
 
 
