@@ -40,6 +40,25 @@ const initialGameSessions = [
     almostCorrectAnswerCount: 2,
     startTimeStamp: "2018-06-26T21:01:31.169Z",
     endTimeStamp: "2018-06-26T21:01:34.169Z"
+  },
+  {
+    user: '5b2b8c851867cd00142634e7',
+    mode: 'viallinen update',
+    length: 7,
+    difficulty: 'normaali',
+    animals: ["5b2b8c851867cd00142634e9", "5b2b8c8d1867cd00142634ea"],
+    bodyParts: [
+      {
+        id: "5b2b8d4b1867cd00142634eb",
+        },
+      {
+        id: "5b2b8d521867cd00142634ec",
+      }
+    ],
+    correctAnswerCount: 4,
+    almostCorrectAnswerCount: 2,
+    startTimeStamp: "2018-06-26T21:01:31.169Z",
+    endTimeStamp: "2018-06-26T21:01:34.169Z"
   }
 ]
 

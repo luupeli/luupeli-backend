@@ -33,10 +33,7 @@ gameSessionsRouter.get('/:id', async(request, response) => {
 gameSessionsRouter.post('/', async(request, response) => {
 	try {
     const body = request.body
-    
-    if (body.user === undefined) {
-      return response.status(400).json({ error: 'user missing' })
-    } else if (body.animals === undefined) {
+    if (body.animals === undefined) {
       return response.status(400).json({ error: 'animals missing' })
     } else if (body.bodyParts === undefined) {
       return response.status(400).json({ error: 'bodyparts missing' })
@@ -59,8 +56,8 @@ gameSessionsRouter.post('/', async(request, response) => {
 			bodyparts: body.bodyparts,
 			correctAnswerCount: body.correctAnswerCount,
 			almostCorrectAnswerCount: body.almostCorrectAnswerCount,
-			startTimeStamp: Date.now(),
-			endTimeStamp: Date.now()
+			seconds: body.seconds,
+			timeStamp: Date.now()
 		})
 
 		const savedGameSession = await gameSession.save()
@@ -89,8 +86,8 @@ gameSessionsRouter.put('/:id', async(request, response) => {
 			bodyparts: body.bodyparts,
 			correctAnswerCount: body.correctAnswerCount,
 			almostCorrectAnswerCount: body.almostCorrectAnswerCount,
-			startTimeStamp: body.startTimeStamp,
-			endTimeStamp: body.endTimeStamp
+			seconds: body.seconds,
+			timeStamp: body.timeStamp
 		})
 
 		const updatedGameSession = await GameSession.findByIdAndUpdate(request.params.id)

@@ -94,10 +94,27 @@ describe('when there are initially some game sessions saved', async () => {
       expect(modes).toContain('muokattu pelimuoto')
       expect(modes).not.toContain(oldMode)
     })
+
+    test('400 statuscode is returned when PUT /api/gamesessions/:id is done with malformatted id') {
+      const sessionsAtStart = await gameSessionsInDb()
+      const invalidId = 'd7dsatgfds6wda'
+      const newSession = gameSessionsToBeAdded[2]
+
+      await api
+        .put(url + '/' + invalidId)
+        .send(newSession)
+        .expect(400)
+
+      const sessionsAfterPut = await bonesInDb()
+      const modes = sessionsAfterPut.map(g => g.mode)
+      expect(modes).toContain('muokattu pelimuoto')
+      expect(modes).not.toContain(oldMode)
+    }
   })
 
   afterAll(() => {
     server.close()
   })
+
 
 })

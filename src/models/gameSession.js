@@ -10,8 +10,8 @@ const gameSessionSchema = new mongoose.Schema({
     correctAnswerCount: Number,
     almostCorrectAnswerCount: Number,
     totalScore: Number,
-    startTimeStamp: { type: Date },
-    endTimeStamp: { type: Date }
+    seconds: Number,
+    timeStamp: { type: Date }
 })
 
 gameSessionSchema.statics.format = (gameSession) => {
@@ -25,8 +25,8 @@ gameSessionSchema.statics.format = (gameSession) => {
 		bodyparts: gameSession.bodyparts,
 		correctAnswerCount: gameSession.correctAnswerCount,
 		almostCorrectAnswerCount: gameSession.almostCorrectAnswerCount,
-		startTimeStamp: gameSession.startTimeStamp,
-		endTimeStamp: gameSession.endTimeStamp
+		seconds: gameSession.seconds,
+		timeStamp: gameSession.timeStamp
 	}
 }
 
