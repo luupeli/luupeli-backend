@@ -65,4 +65,4 @@ const formatUser = (user) => {
   }
 }
 
-module.exports = { usersInDb, initialUsers1, initialUsers2, initialUsers2, formatUser }
+module.exports = { usersInDb, initialUsers1, initialUsers2, initialUsers3, formatUser }
