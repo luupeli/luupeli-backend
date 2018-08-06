@@ -3,9 +3,6 @@ const { app, server } = require('../index')
 const api = supertest(app)
 const Animal = require('../models/animal')
 const { formatAnimal, initialAnimals, animalsInDb } = require('./animal_test_helper')
-const { initialUsers3 } = require('./user_test_helper')
-const User = require('../models/user')
-const { getToken } = require('../utils/adminJWTs')
 
 const url = '/api/animals'
 
@@ -15,9 +12,6 @@ describe('when there is initially some animals saved', async () => {
 		await Animal.remove({})
 		const animalObjects = initialAnimals.map(a => new Animal(a))
 		await Promise.all(animalObjects.map(a => a.save()))
-		await User.remove({})
-		const userObjects = initialUsers3.map(u => new User(u))
-		await Promise.all(userObjects.map(u => u.save()))
 	})
 
 	test('all images are returned as JSON by GET /api/animals', async () => {
@@ -41,14 +35,12 @@ describe('when there is initially some animals saved', async () => {
 
 			test('succesfully adds valid animal by POST /api/animals', async () => {
 				const animalsAtStart = await animalsInDb()
-				const user = await User.findOne({ username: 'luuadmin' })
-				const token = getToken(user)
 				const animal = {
 					name: 'Rotta'
 				}
 				await api
 					.post(url)
-					.send({ animal, token: token })
+					.send(animal)
 					.expect(200)
 					.expect('Content-Type', /application\/json/)
 
@@ -60,12 +52,10 @@ describe('when there is initially some animals saved', async () => {
 
 			test('does not add an animal without a name', async () => {
 				const animals = await animalsInDb()
-				const user = await User.findOne({ username: 'luuadmin' })
-				const token = getToken(user)
 				const animal = {}
 				await api
 					.post(url)
-					.send({ animal, token: token })
+					.send(animal)
 					.expect(400)
 
 				const animalsAfter = await animalsInDb()

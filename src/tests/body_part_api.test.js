@@ -3,9 +3,6 @@ const { app, server } = require('../index')
 const api = supertest(app)
 const BodyPart = require('../models/bodyPart')
 const { initialBodyParts, formatBodyPart, bodyPartsInDb } = require('./body_part_test_helper')
-const { initialUsers2 } = require('./user_test_helper')
-const User = require('../models/user')
-const { getToken } = require('../utils/adminJWTs')
 
 const url = '/api/bodyparts'
 
@@ -16,9 +13,6 @@ describe('when there are initially some body parts saved', async () => {
 		await BodyPart.remove({})
 		const parts = initialBodyParts.map(bp => new BodyPart(bp))
 		await Promise.all(parts.map(bp => bp.save()))
-		await User.remove({})
-		const userObjects = initialUsers2.map(u => new User(u))
-		await Promise.all(userObjects.map(u => u.save()))
 	})
 
 	test('all parts are returned as JSON by GET /api/parts', async () => {
@@ -61,14 +55,12 @@ describe('when there are initially some body parts saved', async () => {
 
 			test('successfully adds a new body part when posting to /api/bodyparts', async () => {
 				const parts = await bodyPartsInDb()
-				const user = await User.findOne({ username: 'zizek' })
-				const token = getToken(user)
 				const bp = {
 					name: "Varvas"
 				}
 
 				await api.post(url)
-					.send({ bodypart: bp, token: token })
+					.send(bp)
 					.expect(200)
 
 				const partsAfter = await bodyPartsInDb()
@@ -77,12 +69,10 @@ describe('when there are initially some body parts saved', async () => {
 
 			test('does not add a body part without a name', async () => {
 				const parts = await bodyPartsInDb()
-				const user = await User.findOne({ username: 'zizek' })
-				const token = getToken(user)
 				const bp = {}
 				await api
 					.post(url)
-					.send({ bodypart: bp, token: token })
+					.send(bp)
 					.expect(400)
 
 				const partsAfter = await bodyPartsInDb()
