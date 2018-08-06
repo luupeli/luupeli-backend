@@ -14,21 +14,21 @@ describe('when there is initially some users in database', async () => {
     await Promise.all(userObjects.map(u => u.save()))
   })
 
-  test('a token is returned with status code 200 by POST /api/login with existing username and correct password', async () => {
-    const loginData = {
-      username: 'spinoza',
-      password: 'sub_specie_aeternitatis'
-    }
+  // test('a token is returned with status code 200 by POST /api/login with existing username and correct password', async () => {
+  //   const loginData = {
+  //     username: 'spinoza',
+  //     password: 'sub_specie_aeternitatis'
+  //   }
 
-    const response = await api
-      .post(url)
-      .send(loginData)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+  //   const response = await api
+  //     .post(url)
+  //     .send(loginData)
+  //     .expect(200)
+  //     .expect('Content-Type', /application\/json/)
 
-    expect(response.body.token)
-    // console.log('token: ' + response.body.token)
-  })
+  //   expect(response.body.token)
+  //   // console.log('token: ' + response.body.token)
+  // })
 
   test('status code 401 is returned when attempting to POST /api/login with incorrect username', async () => {
     const loginData = {
