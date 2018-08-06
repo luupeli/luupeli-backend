@@ -86,7 +86,7 @@ gameSessionsRouter.put('/:id', async(request, response) => {
 			bodyparts: body.bodyparts,
 			correctAnswerCount: body.correctAnswerCount,
 			almostCorrectAnswerCount: body.almostCorrectAnswerCount,
-			seconds: body.seconds,
+			seconds: body.totalSeconds,
 			timeStamp: body.timeStamp
 		})
 
