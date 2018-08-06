@@ -95,7 +95,7 @@ gameSessionsRouter.put('/:id', async(request, response) => {
 
 	} catch (err) {
 		console.log(err)
-		response.status(500).json({ error: 'something went wrong'} )
+    response.status(400).send({ error: 'malformatted id' })
 	}
 })
 

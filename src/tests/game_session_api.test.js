@@ -82,8 +82,8 @@ describe('when there are initially some game sessions saved', async () => {
       let sessionToBeUpdated = sessionsAtStart[0]
       let oldMode = sessionToBeUpdated.mode
 
-      sessionToBeUpdated.mode = 'muokattu pelimuoto'
-
+      sessionToBeUpdated.mode = 'muokattupelimuoto'
+      console.log(sessionToBeUpdated)
       await api
         .put(url + '/' + sessionToBeUpdated.id)
         .send(sessionToBeUpdated)
@@ -91,11 +91,11 @@ describe('when there are initially some game sessions saved', async () => {
 
       const sessionsAfterPut = await gameSessionsInDb()
       const modes = sessionsAfterPut.map(g => g.mode)
-      expect(modes).toContain('muokattu pelimuoto')
+      expect(modes).toContain('muokattupelimuoto')
       expect(modes).not.toContain(oldMode)
     })
 
-    test('400 statuscode is returned when PUT /api/gamesessions/:id is done with malformatted id') {
+    test('400 statuscode is returned when PUT /api/gamesessions/:id is done with malformatted id', async () => {
       const sessionsAtStart = await gameSessionsInDb()
       const invalidId = 'd7dsatgfds6wda'
       const newSession = gameSessionsToBeAdded[2]
@@ -105,11 +105,11 @@ describe('when there are initially some game sessions saved', async () => {
         .send(newSession)
         .expect(400)
 
-      const sessionsAfterPut = await bonesInDb()
+      const sessionsAfterPut = await gameSessionsInDb()
       const modes = sessionsAfterPut.map(g => g.mode)
-      expect(modes).toContain('muokattu pelimuoto')
+      expect(modes).toContain('muokattupelimuoto')
       expect(modes).not.toContain(oldMode)
-    }
+    })
   })
 
   afterAll(() => {
