@@ -32,10 +32,11 @@ gameSessionsRouter.get('/:id', async(request, response) => {
 
 gameSessionsRouter.post('/', async(request, response) => {
 	try {
-    const body = request.body
-    if (body.animals === undefined) {
+		const body = request.body
+		
+		if (body.animals === undefined) {
       return response.status(400).json({ error: 'animals missing' })
-    } else if (body.bodyParts === undefined) {
+    } else if (body.bodyparts === undefined) {
       return response.status(400).json({ error: 'bodyparts missing' })
     } else if (body.mode === undefined) {
       return response.status(400).json({ error: 'game mode missing' })
@@ -45,13 +46,13 @@ gameSessionsRouter.post('/', async(request, response) => {
       return response.status(400).json({ error: 'count for correct answers missing' })
     } else if (body.almostCorrectAnswerCount === undefined) {
       return response.status(400).json({ error: 'count for almost correct answers missing' })
-    }
-
+    } else if (body.seconds === undefined) {
+			return response.status(400).json({ error: 'seconds missing' })
+		}
 		const gameSession = new GameSession({
 			user: body.user,
 			mode: body.mode,
 			length: body.length,
-			difficulty: body.difficulty,
 			animals: body.animals,
 			bodyparts: body.bodyparts,
 			correctAnswerCount: body.correctAnswerCount,
@@ -81,12 +82,11 @@ gameSessionsRouter.put('/:id', async(request, response) => {
 			user: body.user,
 			mode: body.mode,
 			length: body.length,
-			difficulty: body.difficulty,
 			animals: body.animals,
 			bodyparts: body.bodyparts,
 			correctAnswerCount: body.correctAnswerCount,
 			almostCorrectAnswerCount: body.almostCorrectAnswerCount,
-			seconds: body.totalSeconds,
+			seconds: body.seconds,
 			timeStamp: body.timeStamp
 		})
 
@@ -94,8 +94,8 @@ gameSessionsRouter.put('/:id', async(request, response) => {
 		response.json(GameSession.format(updatedGameSession))
 
 	} catch (err) {
-		//console.log(err)
-    response.status(400).send({ error: 'malformatted id' })
+		console.log(err)
+		response.status(500).json({ error: 'something went wrong'} )
 	}
 })
 
