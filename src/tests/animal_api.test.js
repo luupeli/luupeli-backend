@@ -31,48 +31,33 @@ describe('when there is initially some animals saved', async () => {
 
 	describe('addition of a new animal', async () => {
 
-		describe('when an admin token is sent with the request', async () => {
+		test('succesfully adds valid animal by POST /api/animals', async () => {
+			const animalsAtStart = await animalsInDb()
+			const animal = {
+				name: 'Rotta'
+			}
+			await api
+				.post(url)
+				.send(animal)
+				.expect(200)
+				.expect('Content-Type', /application\/json/)
 
-			test('succesfully adds valid animal by POST /api/animals', async () => {
-				const animalsAtStart = await animalsInDb()
-				const animal = {
-					name: 'Rotta'
-				}
-				await api
-					.post(url)
-					.send(animal)
-					.expect(200)
-					.expect('Content-Type', /application\/json/)
-
-				const animalsAfterPost = await animalsInDb()
-				expect(animalsAfterPost.length).toBe(animalsAtStart.length + 1)
-				const names = animalsAfterPost.map(a => a.name)
-				expect(names).toContain('Rotta')
-			})
-
-			test('does not add an animal without a name', async () => {
-				const animals = await animalsInDb()
-				const animal = {}
-				await api
-					.post(url)
-					.send(animal)
-					.expect(400)
-
-				const animalsAfter = await animalsInDb()
-				expect(animalsAfter.length).toBe(animals.length)
-			})
+			const animalsAfterPost = await animalsInDb()
+			expect(animalsAfterPost.length).toBe(animalsAtStart.length + 1)
+			const names = animalsAfterPost.map(a => a.name)
+			expect(names).toContain('Rotta')
 		})
-		describe('when an admin token is not sent with the request', async () => {
 
-			test('Unauthorized 401', async () => {
-				const animal = {
-					name: 'Rotta'
-				}
-				await api
-					.post(url)
-					.send({ animal })
-					.expect(401)
-			})
+		test('does not add an animal without a name', async () => {
+			const animals = await animalsInDb()
+			const animal = {}
+			await api
+				.post(url)
+				.send(animal)
+				.expect(400)
+
+			const animalsAfter = await animalsInDb()
+			expect(animalsAfter.length).toBe(animals.length)
 		})
 	})
 
