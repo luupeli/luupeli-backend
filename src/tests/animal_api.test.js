@@ -3,7 +3,7 @@ const { app, server } = require('../index')
 const api = supertest(app)
 const Animal = require('../models/animal')
 const { formatAnimal, initialAnimals, animalsInDb } = require('./animal_test_helper')
-const { initialUsers2 } = require('./user_test_helper')
+const { initialUsers3 } = require('./user_test_helper')
 const User = require('../models/user')
 const { getToken } = require('../utils/adminJWTs')
 
@@ -16,7 +16,7 @@ describe('when there is initially some animals saved', async () => {
 		const animalObjects = initialAnimals.map(a => new Animal(a))
 		await Promise.all(animalObjects.map(a => a.save()))
 		await User.remove({})
-		const userObjects = initialUsers2.map(u => new User(u))
+		const userObjects = initialUsers3.map(u => new User(u))
 		await Promise.all(userObjects.map(u => u.save()))
 	})
 
@@ -41,7 +41,7 @@ describe('when there is initially some animals saved', async () => {
 
 			test('succesfully adds valid animal by POST /api/animals', async () => {
 				const animalsAtStart = await animalsInDb()
-				const user = await User.findOne({ username: 'zizek' })
+				const user = await User.findOne({ username: 'luuadmin' })
 				const token = getToken(user)
 				const animal = {
 					name: 'Rotta'
@@ -60,7 +60,7 @@ describe('when there is initially some animals saved', async () => {
 
 			test('does not add an animal without a name', async () => {
 				const animals = await animalsInDb()
-				const user = await User.findOne({ username: 'zizek' })
+				const user = await User.findOne({ username: 'luuadmin' })
 				const token = getToken(user)
 				const animal = {}
 				await api

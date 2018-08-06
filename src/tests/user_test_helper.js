@@ -40,6 +40,22 @@ const initialUsers2 = [
   }
 ]
 
+const initialUsers3 = [
+  {
+    username: 'notanadmin',
+    passwordHash: '$2a$07$48pL4qjrKCnpyQLaneYB.OJ7PWjt3LUC7YV4nQRuqPt7MC2v666KC'
+  },
+  {
+    username: 'ferninand',
+    passwordHash: '$2a$07$mKoxRqrQ92nYsPMPKP8gN.bhkZl9WiAHk5yZjRBv10J1bE64q.IO6'
+  },
+  {
+    username: 'luuadmin',
+    passwordHash: '$2a$07$Iht66dX4FFykLsUVAvB/WOSV/.DzN1mNR3bz2tPbhxucbHA2VSNau',
+    role: 'ADMIN'
+  }
+]
+
 const formatUser = (user) => {
   return {
     id: user._id,
@@ -49,4 +65,4 @@ const formatUser = (user) => {
   }
 }
 
-module.exports = { usersInDb, initialUsers1, initialUsers2, formatUser }
+module.exports = { usersInDb, initialUsers1, initialUsers2, initialUsers3, formatUser }
