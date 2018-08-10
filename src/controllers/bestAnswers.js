@@ -1,24 +1,52 @@
-const bestAnswersRouter = require('express').Router()
+const moment = require('moment');
+const answersRouter = require('express').Router()
 const Answer = require('../models/answer')
+const BestAnswer = Answer.Best
 
-bestAnswersRouter.get('/', async(request, response) => {
+answersRouter.get('/', async(request, response) => {
+	let searchParams = {}
+	if (request.query.user !== undefined) {
+		searchParams = { ...searchParams, user: request.query.user }
+	}
+	if (request.query.gamemode !== undefined) {
+		searchParams = { ...searchParams, gamemode: request.query.gamemode }
+	}
+	if (request.query.game_difficulty !== undefined) {
+		searchParams = { ...searchParams, gameDifficulty: request.query.game_difficulty }
+	}
+	if (request.query.image !== undefined) {
+		searchParams = { ...searchParams, image: request.query.image }
+	}
+
+	let min = 0
+	let max = 100
+	if (request.query.correctness_min !== undefined) {
+		min = Number(request.query.correctness_min)
+	}
+	if (request.query.correctness_max !== undefined) {
+		max = request.query.correctness_max
+	}
+
 	const answers = await Answer
-		.find({})
+		.find(searchParams)
+		.where('correctness').gte(min).lte(max)
 		.populate('images')
-		.populate('user', {username: 1})
-	response.json(answers.map(Answer.format))
+		.populate('gameSession')
+		.populate('user')
+
+	response.json(timeFilter(request, answers).map(BestAnswer.format))
 })
 
-bestAnswersRouter.get('/:id', async(request, response) => {
-	
+answersRouter.get('/:id', async(request, response) => {	
 	try {
-		const answer = await Answer
+		const answer = await BestAnswer
 			.findById(request.params.id)
 			.populate('images')
-			.populate('user', {username: 1})
+			.populate('gameSession')
+			.populate('user')
 
 		if (answer) {
-			response.json(Answer.format(answer))
+			response.json(BestAnswer.format(answer))
 		} else {
 			response.status(404).end()
 		}
@@ -28,60 +56,11 @@ bestAnswersRouter.get('/:id', async(request, response) => {
 	}
 })
 
-bestAnswersRouter.post('/', async(request, response) => {
+answersRouter.delete('/:id', async(request, response) => {
 	try {
-		const body = request.body
+		const answer = await BestAnswer.findById(request.params.id)
+		await BestAnswer.remove(answer)
 		
-    const answer = new Answer({
-			image: body.image,
-			user: body.user,
-			correctness: body.correctness,
-			input: body.input,
-			points: body.points,
-			lastModified: Date.now(),
-			creationTime: Date.now()		
-    })
-
-    const savedAnswer = await answer.save()
-    response.json(Answer.format(answer))
-  } catch (err) {
-    console.log(err)
-    response.status(500).json({ error: 'something went wrong' })
-  }
-})
-
-bestAnswersRouter.put('/:id', async(request, response) => {
-	try {
-		const body = request.body
-		const oldAnswer = Answer.findById(request.params.id)
-
-		if(!oldAnswer) {
-			response.status(404).end()
-		}
-
-		const answer = new Answer({
-			image: body.image,
-			user: body.user,
-			correctness: body.correctness,
-			input: body.input,
-			points: body.points,
-			lastModified: Date.now(),
-			creationTime: body.creationTime		
-		})
-
-		const updatedAnswer = await Answer.findByIdAndUpdate(request.params.id, answer, { new: true})
-		response.json(Answer.format(updatedAnswer))
-	} catch (err) {
-    console.log(err)
-    response.status(500).json({ error: 'something went wrong' })
-  }
-})
-
-bestAnswersRouter.delete('/:id', async(request, response) => {
-	try {
-		const answer = await Answer.findById(request.params.id)
-		await Answer.remove(answer)
-
 		response.status(204).end()
 	} catch (err) {
 		console.log(err)
@@ -89,4 +68,31 @@ bestAnswersRouter.delete('/:id', async(request, response) => {
 	}
 })
 
-module.exports = bestAnswersRouter
+
+module.exports = answersRouter
+
+function timeFilter(request, gameSessions) {
+	let timeFilter;
+	if (request.query.start === undefined && request.query.end === undefined) {
+		timeFilter = gameSessions;
+	}
+	if (request.query.start === undefined) {
+		timeFilter = gameSessions.filter(g => {
+			const date = moment(g.timeStamp).format().substring(0, 10);
+			return moment(date).isBefore(request.query.end);
+		});
+	}
+	else if (request.query.end === undefined) {
+		timeFilter = gameSessions.filter(g => {
+			const date = moment(g.timeStamp).format().substring(0, 10);
+			return moment(date).isBetween(request.query.start, request.query.end, null, '[]');
+		});
+	}
+	else {
+		timeFilter = gameSessions.filter(g => {
+			const date = moment(g.timeStamp).format().substring(0, 10);
+			return moment(date).isBetween(request.query.start, request.query.end, null, '[]');
+		});
+	}
+	return timeFilter
+}

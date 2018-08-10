@@ -5,11 +5,13 @@ const gameSessionSchema = new mongoose.Schema({
     mode: String,
     length: Number,
     animals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'animal' }],
-    bodyparts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'bodyPart' }],
+	bodyparts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'bodyPart' }],
+	answers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'answer' }],
     correctAnswerCount: Number,
     almostCorrectAnswerCount: Number,
     totalScore: Number,
-    seconds: Number,
+	seconds: Number,
+	gameDifficulty: String,
     timeStamp: { type: Date }
 })
 
@@ -21,9 +23,11 @@ gameSessionSchema.statics.format = (gameSession) => {
 		length: gameSession.length,
 		animals: gameSession.animals,
 		bodyparts: gameSession.bodyparts,
+		answers: gameSession.answers,
 		correctAnswerCount: gameSession.correctAnswerCount,
 		almostCorrectAnswerCount: gameSession.almostCorrectAnswerCount,
 		seconds: gameSession.seconds,
+		gameDifficulty: gameSession.gameDifficulty,
 		timeStamp: gameSession.timeStamp
 	}
 }

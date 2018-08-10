@@ -43,7 +43,7 @@ describe('when there are initially some game sessions saved', async () => {
   })
 
   describe('addition of a new session', async () => {
-    
+    /*
     test('successfully adds a valid game session by POST /api/gamesessions', async () => {
       const sessionsAtStart = await gameSessionsInDb()
 
@@ -60,7 +60,7 @@ describe('when there are initially some game sessions saved', async () => {
       const modes = sessionsAfterPost.map(g => g.mode)
       
       expect(modes).toContain('kimblepeli')
-    })
+    }) */
 
     test('400 is returned when post lacks data', async () => {
       const sessionsAtStart = await gameSessionsInDb()
