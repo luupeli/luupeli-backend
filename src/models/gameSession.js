@@ -27,6 +27,7 @@ gameSessionSchema.statics.format = (gameSession) => {
 		correctAnswerCount: gameSession.correctAnswerCount,
 		almostCorrectAnswerCount: gameSession.almostCorrectAnswerCount,
 		seconds: gameSession.seconds,
+		totalScore: gameSession.totalScore,
 		gameDifficulty: gameSession.gameDifficulty,
 		timeStamp: gameSession.timeStamp
 	}

@@ -1,5 +1,6 @@
 const gameSessionsRouter = require('express').Router()
 const GameSession = require('../models/gameSession')
+const User = require('../models/user')
 const Answer = require('../models/answer')
 const moment = require('moment');
 
@@ -32,11 +33,11 @@ gameSessionsRouter.post('/', async (request, response) => {
 			correctAnswerCount: body.answers.filter(ans => ans.correctness === 100).length,
 			almostCorrectAnswerCount: body.answers.filter(ans => ans.correctness > 70 && ans.correctness < 100).length,
 			seconds: body.seconds,
+			totalScore: body.answers.reduce((a, b) => a + b.score, 0),
 			answers: [],
 			gameDifficulty: body.gameDifficulty,
 			timeStamp: Date.now()
 		})
-
 		const savedGameSession = await gameSession.save()
 
 		// Connecting game session and answers
@@ -98,6 +99,24 @@ gameSessionsRouter.get('/', async (request, response) => {
 		.populate('answers')
 
 	response.json(timeFilter(request, gameSessions).map(GameSession.format));
+})
+
+gameSessionsRouter.get('/top_list/', async (request, response) => {
+	let limit = 4000
+	if (request.query.limit !== undefined) {
+		limit = Number(request.query.limit)
+	}
+
+	let gameSessions = await GameSession
+		.aggregate([
+			{ $group: { _id: "$user", total: { $sum: "$totalScore" } } },
+			{ $sort: { total: -1 } },
+			{ $limit: limit }
+		])
+
+	gameSessions = gameSessions.filter(gs => gs._id !== null)
+
+	response.json(gameSessions);
 })
 
 gameSessionsRouter.get('/:id', async (request, response) => {
