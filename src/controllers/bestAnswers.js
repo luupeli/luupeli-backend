@@ -27,7 +27,7 @@ answersRouter.get('/', async(request, response) => {
 		max = request.query.correctness_max
 	}
 
-	const answers = await Answer
+	const answers = await BestAnswer
 		.find(searchParams)
 		.where('correctness').gte(min).lte(max)
 		.populate('images')

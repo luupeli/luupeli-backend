@@ -59,12 +59,11 @@ gameSessionsRouter.post('/', async (request, response) => {
 			savedAnswers.push(savedAnswer)
 
 			// Here we check is this answer the best answer
-			if (body.user !== null) {
+			if (body.user !== null && body.user !== undefined) {
 				const previousBest = await Answer.Best.find({ user: body.user, image: body.answers[i].image.id })
 				if ((body.gameDifficulty.includes('medium') || body.gameDifficulty.includes('hard')) &&
 					(previousBest.length === 0 || previousBest[0].score <= answer.score)) {
-					const newBest = new Answer.Best(answer)
-					await newBest.save()
+					await new Answer.Best(answer).save()
 				}
 			}
 		}
