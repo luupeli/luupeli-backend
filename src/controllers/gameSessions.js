@@ -107,6 +107,8 @@ gameSessionsRouter.get('/top_list/', async (request, response) => {
 		limit = Number(request.query.limit)
 	}
 
+	const users = await User.find({})
+
 	let gameSessions = await GameSession
 		.aggregate([
 			{ $group: { _id: "$user", total: { $sum: "$totalScore" } } },
@@ -115,6 +117,11 @@ gameSessionsRouter.get('/top_list/', async (request, response) => {
 		])
 
 	gameSessions = gameSessions.filter(gs => gs._id !== null)
+	gameSessions = gameSessions.map(gs => {
+		return ({
+			...gs, user: users.filter(user => user.id.includes(gs._id))[0]
+		})
+	})
 
 	response.json(gameSessions);
 })
