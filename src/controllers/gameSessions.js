@@ -101,7 +101,7 @@ gameSessionsRouter.get('/', async (request, response) => {
 	response.json(timeFilter(request, gameSessions).map(GameSession.format));
 })
 
-gameSessionsRouter.get('/top_list/', async (request, response) => {
+gameSessionsRouter.get('/top_list_all/', async (request, response) => {
 	let limit = 4000
 	if (request.query.limit !== undefined) {
 		limit = Number(request.query.limit)
@@ -124,6 +124,34 @@ gameSessionsRouter.get('/top_list/', async (request, response) => {
 	})
 
 	response.json(gameSessions);
+})
+
+gameSessionsRouter.get('/top_list_game', async (request, response) => {
+	let searchParams = {}
+	if (request.query.user !== undefined) {
+		searchParams = { ...searchParams, user: request.query.user }
+	}
+	if (request.query.gamemode !== undefined) {
+		searchParams = { ...searchParams, gamemode: request.query.gamemode }
+	}
+	if (request.query.game_difficulty !== undefined) {
+		searchParams = { ...searchParams, gameDifficulty: request.query.game_difficulty }
+	}
+	let limit = 4000
+	if (request.query.limit!== undefined) {
+		limit = Number(request.query.limit)
+	}
+
+	const gameSessions = await GameSession
+		.find(searchParams)
+		.sort('-totalScore')
+		.limit(limit)
+		.populate('user')
+		.populate('animals')
+		.populate('bodyparts')
+		.populate('answers')
+
+	response.json(timeFilter(request, gameSessions).map(GameSession.format));
 })
 
 gameSessionsRouter.get('/:id', async (request, response) => {

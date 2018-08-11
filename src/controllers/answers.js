@@ -36,6 +36,37 @@ answersRouter.get('/', async(request, response) => {
 	response.json(timeFilter(request, answers).map(Answer.format))
 })
 
+answersRouter.get('/top_answers', async(request, response) => {
+	let searchParams = {}
+	if (request.query.user !== undefined) {
+		searchParams = { ...searchParams, user: request.query.user }
+	}
+	if (request.query.gamemode !== undefined) {
+		searchParams = { ...searchParams, gamemode: request.query.gamemode }
+	}
+	if (request.query.game_difficulty !== undefined) {
+		searchParams = { ...searchParams, gameDifficulty: request.query.game_difficulty }
+	}
+	if (request.query.image !== undefined) {
+		searchParams = { ...searchParams, image: request.query.image }
+	}
+
+	let limit = 4000
+	if (request.query.limit!== undefined) {
+		limit = Number(request.query.limit)
+	}
+
+	const answers = await Answer
+		.find(searchParams)
+		.sort('-points')
+		.limit(limit)
+		.populate('images')
+		.populate('gameSession')
+		.populate('user')
+
+	response.json(timeFilter(request, answers).map(Answer.format))
+})
+
 answersRouter.get('/:id', async(request, response) => {	
 	try {
 		const answer = await Answer

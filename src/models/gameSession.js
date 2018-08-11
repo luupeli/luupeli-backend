@@ -2,7 +2,7 @@ mongoose = require('mongoose')
 
 const gameSessionSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-    mode: String,
+    gamemode: String,
     length: Number,
     animals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'animal' }],
 	bodyparts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'bodyPart' }],
@@ -19,7 +19,7 @@ gameSessionSchema.statics.format = (gameSession) => {
 	return {
 		id: gameSession._id,
 		user: gameSession.user,
-		mode: gameSession.mode,
+		gamemode: gameSession.gamemode,
 		length: gameSession.length,
 		animals: gameSession.animals,
 		bodyparts: gameSession.bodyparts,
