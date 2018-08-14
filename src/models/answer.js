@@ -7,9 +7,10 @@ const answerSchema = new mongoose.Schema({
 	correctness: Number,
 	input: String,
 	points: Number,
-	time: Number,
+	seconds: Number,
 	gamemode: String,
-	lastModified: { type: Date },
+	gamesession: { type: mongoose.Schema.Types.ObjectId, ref: 'gameSession' },
+	gameDifficulty: String,
 	creationTime: { type: Date }
 })
 
@@ -22,11 +23,15 @@ answerSchema.statics.format = (answer) => {
 		correctness: answer.correctness,
 		input: answer.input,
 		points: answer.points,
-		lastModified: answerSchema.lastModified,
+		seconds: answer.seconds,
+		gamemode: answer.gamemode,
+		gamesession: answer.gamesession,
+		gameDifficulty: answer.gameDifficulty,
 		creationTime: answer.creationTime
 	}
 }
 
 const Answer = mongoose.model("answer", answerSchema)
+Answer.Best = mongoose.model("bestAnswer", answerSchema)
 
 module.exports = Answer

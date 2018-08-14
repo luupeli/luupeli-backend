@@ -1,13 +1,70 @@
 const answersRouter = require('express').Router()
 const Answer = require('../models/answer')
+const moment = require('moment');
 
 answersRouter.get('/', async(request, response) => {
-	const answers = await Answer
-		.find({})
-		.populate('images')
-		.populate('user', {username: 1})
+	let searchParams = {}
+	if (request.query.user !== undefined) {
+		searchParams = { ...searchParams, user: request.query.user }
+	}
+	if (request.query.gamemode !== undefined) {
+		searchParams = { ...searchParams, gamemode: request.query.gamemode }
+	}
+	if (request.query.game_difficulty !== undefined) {
+		searchParams = { ...searchParams, gameDifficulty: request.query.game_difficulty }
+	}
+	if (request.query.image !== undefined) {
+		searchParams = { ...searchParams, image: request.query.image }
+	}
 
-	response.json(answers.map(Answer.format))
+	let min = 0
+	let max = 100
+	if (request.query.correctness_min !== undefined) {
+		min = Number(request.query.correctness_min)
+	}
+	if (request.query.correctness_max !== undefined) {
+		max = request.query.correctness_max
+	}
+
+	const answers = await Answer
+		.find(searchParams)
+		.where('correctness').gte(min).lte(max)
+		.populate('images')
+		.populate('gameSession')
+		.populate('user')
+
+	response.json(timeFilter(request, answers).map(Answer.format))
+})
+
+answersRouter.get('/top_answers', async(request, response) => {
+	let searchParams = {}
+	if (request.query.user !== undefined) {
+		searchParams = { ...searchParams, user: request.query.user }
+	}
+	if (request.query.gamemode !== undefined) {
+		searchParams = { ...searchParams, gamemode: request.query.gamemode }
+	}
+	if (request.query.game_difficulty !== undefined) {
+		searchParams = { ...searchParams, gameDifficulty: request.query.game_difficulty }
+	}
+	if (request.query.image !== undefined) {
+		searchParams = { ...searchParams, image: request.query.image }
+	}
+
+	let limit = 4000
+	if (request.query.limit!== undefined) {
+		limit = Number(request.query.limit)
+	}
+
+	const answers = await Answer
+		.find(searchParams)
+		.sort('-points')
+		.limit(limit)
+		.populate('images')
+		.populate('gameSession')
+		.populate('user')
+
+	response.json(timeFilter(request, answers).map(Answer.format))
 })
 
 answersRouter.get('/:id', async(request, response) => {	
@@ -15,7 +72,8 @@ answersRouter.get('/:id', async(request, response) => {
 		const answer = await Answer
 			.findById(request.params.id)
 			.populate('images')
-			.populate('user', {username: 1})
+			.populate('gameSession')
+			.populate('user')
 
 		if (answer) {
 			response.json(Answer.format(answer))
@@ -63,28 +121,6 @@ answersRouter.get('/user/:userId', async(request, response) => {
 	}
 })
 
-answersRouter.post('/', async(request, response) => {
-	try {
-		const body = request.body
-		
-    const answer = new Answer({
-			image: body.image,
-			user: body.user,
-			correctness: body.correctness,
-			input: body.input,
-			points: body.points,
-			lastModified: Date.now(),
-			creationTime: Date.now()		
-    })
-
-    const savedAnswer = await answer.save()
-    response.json(Answer.format(answer))
-  } catch (err) {
-    console.log(err)
-    response.status(500).json({ error: 'something went wrong' })
-  }
-})
-
 answersRouter.delete('/:id', async(request, response) => {
 	try {
 		const answer = await Answer.findById(request.params.id)
@@ -97,4 +133,28 @@ answersRouter.delete('/:id', async(request, response) => {
 	}
 })
 
-module.exports = answersRouter
+function timeFilter(request, list) {
+	let timeFilter;
+	if (request.query.start === undefined && request.query.end === undefined) {
+		timeFilter = list;
+	}
+	if (request.query.start === undefined) {
+		timeFilter = list.filter(g => {
+			const date = moment(g.timeStamp).format().substring(0, 10);
+			return moment(date).isBefore(request.query.end);
+		});
+	}
+	else if (request.query.end === undefined) {
+		timeFilter = list.filter(g => {
+			const date = moment(g.timeStamp).format().substring(0, 10);
+			return moment(date).isBetween(request.query.start, request.query.end, null, '[]');
+		});
+	}
+	else {
+		timeFilter = list.filter(g => {
+			const date = moment(g.timeStamp).format().substring(0, 10);
+			return moment(date).isBetween(request.query.start, request.query.end, null, '[]');
+		});
+	}
+	return timeFilter
+}

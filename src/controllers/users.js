@@ -43,9 +43,9 @@ usersRouter.post('/', async (request, response) => {
       return response.status(400).json({ error: 'password missing' })
     } else if (existingUser.length > 0) {
       return response.status(400).json({ error: 'username must be unique' })
-    } else if (body.username.length <= 3) {
+    } else if (body.username.length < 3) {
       return response.status(400).json({ error: 'username must be longer or equal to 3 characters' })
-    } else if (body.password.length <= 8) {
+    } else if (body.password.length < 8) {
       return response.status(400).json({ error: 'password must be longer or equal to 8 characters' })
     } else if (!body.username.match(alphanumericalRegExpPattern)) {
       return response.status(400).json({ error: 'username must contain only alphanumerical characters a-z, 0-9' })

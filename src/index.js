@@ -30,7 +30,7 @@ app.use('/api/images', require('./controllers/images'))
 app.use('/api/animals', require('./controllers/animals'))
 app.use('/api/bodyparts', require('./controllers/bodyParts'))
 app.use('/api/answers', require('./controllers/answers'))
-app.use('/api/bestanswers', require('./controllers/bestAnswers'))
+app.use('/api/best_answers', require('./controllers/bestAnswers'))
 app.use('/api/gamesessions', require('./controllers/gameSessions'))
 app.use(require('./utils/middleware').error)
 
