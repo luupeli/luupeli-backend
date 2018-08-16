@@ -86,6 +86,41 @@ answersRouter.get('/:id', async(request, response) => {
 	}
 })
 
+answersRouter.get('/user/:userId/img/:imgId', async(request, response) => {
+	try {
+		const answers = await Answer
+			.find({'user': request.params.userId, 'image': request.params.imgId})
+			
+		if (answers) {
+			response.json(answers.map(Answer.format))
+		} else {
+			console.log(err)
+			response.status(404).end()
+		}
+	} catch (err) {
+		console.log(err)
+		response.status(404).send({ error: 'malformatted id' })
+	}
+})
+
+answersRouter.get('/user/:userId', async(request, response) => {
+	try {
+		const answers = await Answer
+			.find({'user': request.params.userId})
+			.populate('images')
+			
+		if (answers) {
+			response.json(answers.map(Answer.format))
+		} else {
+			console.log(err)
+			response.status(404).end()
+		}
+	} catch (err) {
+		console.log(err)
+		response.status(404).send({ error: 'malformatted id' })
+	}
+})
+
 answersRouter.delete('/:id', async(request, response) => {
 	try {
 		const answer = await Answer.findById(request.params.id)
