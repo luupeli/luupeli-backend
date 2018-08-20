@@ -48,6 +48,7 @@ gameSessionsRouter.post('/', async (request, response) => {
 				image: body.answers[i].image.id,
 				correctness: body.answers[i].correctness,
 				input: body.answers[i].answer,
+				animal: body.answers[i].animal,
 				points: body.answers[i].score,
 				seconds: body.answers[i].seconds,
 				gamemode: body.gamemode,
