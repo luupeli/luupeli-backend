@@ -39,4 +39,4 @@ imageSchema.statics.format = (image) => {
 
 const image = mongoose.model('image', imageSchema)
 
-module.exports = image
+module.exports = image 
