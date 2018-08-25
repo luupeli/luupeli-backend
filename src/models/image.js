@@ -13,7 +13,8 @@ const imageSchema = new mongoose.Schema({
     lastModified: { type: Date }, 
     creationTime: { type: Date },
     attempts: Number,
-    correctAttempts: Number
+    correctAttempts: Number,
+    correctness: Number
 })
 
 // Formats image from the database to be used in the app
@@ -31,7 +32,8 @@ imageSchema.statics.format = (image) => {
         lastModified: image.lastModified, 
         creationTime: image.creationTime,
         attempts: image.attempts,
-        correctAttempts: image.correctAttempts
+        correctAttempts: image.correctAttempts,
+        correctness: image.correctness
     }
 }
 
