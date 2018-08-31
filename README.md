@@ -1,6 +1,8 @@
 # luupeli-backend
 [![Build Status](https://travis-ci.org/luupeli/luupeli-backend.svg?branch=master)](https://travis-ci.org/luupeli/luupeli-backend)
 
+Tämä on alkuperäinen backendin repository. Backend yhdistettiin projektin loppuvaiheessa samaan repositoryyn frontendin kanssa.
+
 ### Endpoints
 
 `http://luupeli-backend.herokuapp.com/api`
@@ -22,26 +24,3 @@ Path | Method | Description
 `/bodyparts/` | GET | Returns an array of all body parts.
 `/bodyparts/` | POST | Creates a new body part.
 
-#### Bone
-##### Example
-```
-{
-    "id": "5b15d89a6ffw192a471571fe",
-    "name": "reisiluu",
-    "nameLatin": "ossis femoris",
-    "bodypart": "5b1696776319da662a7ab535",
-    "animal": "5b16961f9aaa4765f8ec6a75",
-    "images": ["5b15674e6ff3192a471571fa", "5b156d2af4d39b2db027f191"]
-}
-```
-
-#### Image
-##### Example
-```
-{
-    "id": "5b15689a6ff3192a471571fe",
-    "difficulty": "1",
-    "url": "public/images/ossisfemoris.jpg",
-    "bone": "5b152f647053790f4be55bc4"
-}
-```
