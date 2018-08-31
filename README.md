@@ -1,7 +1,7 @@
 # luupeli-backend
 [![Build Status](https://travis-ci.org/luupeli/luupeli-backend.svg?branch=master)](https://travis-ci.org/luupeli/luupeli-backend)
 
-Tämä on alkuperäinen backendin repository. Backend yhdistettiin projektin loppuvaiheessa samaan repositoryyn frontendin kanssa.
+HUOM: Tämä on alkuperäinen backendin repository eikä ole ajantasalla. Backend yhdistettiin 25.8. samaan repositoryyn frontendin kanssa.
 
 ### Endpoints
 
